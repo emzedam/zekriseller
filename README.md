@@ -1,4 +1,4 @@
-# Nuxt 3 Minimal Starter
+# zekrimarket seller website
 
 Look at the [zekrimarket seller](https://seller.zekrimarket.com) to view website.
 
