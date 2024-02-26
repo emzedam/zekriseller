@@ -209,6 +209,7 @@
                 </div>
                 <input
                   type="text"
+                  v-model="registerData.seller_info.company_name"
                   class="block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-md p-4"
                   placeholder="نام ثبت شده شرکت"
                 />
@@ -224,120 +225,49 @@
             <div class="flex mt-1 rounded-md">
               <div class="relative w-full focus-within:z-10">
                 <button
+                  @click="personTypeListState = !personTypeListState"
                   type="button"
                   class="text-gray-500 border border-gray-300 focus:ring-1 focus:outline-none focus:ring-cyan-500 font-medium rounded-lg text-sm p-4 text-center inline-flex items-center w-full justify-between"
                 >
                   <i
                     class="fa-duotone fa-building-flag text-cyan-500 h-5 w-5 flex leading-[1px] text-[19px]"
                   ></i
-                  ><span class="w-full pr-2 text-right">نوع شخصیت </span
+                  ><span class="w-full pr-2 text-right">{{
+                    registerData.seller_info.person_type != ""
+                      ? registerData.seller_info.person_type
+                      : "نوع شخصیت"
+                  }}</span
                   ><i
                     class="fa-duotone fa-angle-down text-[14px] ml-1 w-4 h-3 leading-[20px]"
                   ></i>
                 </button>
-                <div class="z-10 hidden w-full mt-2 bg-white border rounded-lg">
+                <div
+                  :class="personTypeListState == true ? '' : 'hidden'"
+                  class="z-10 w-full absolute mt-2 bg-white border rounded-lg"
+                >
                   <ul
                     class="h-40 p-3 overflow-y-auto text-sm text-gray-700"
                     aria-labelledby="dropdownSearchButton"
                   >
-                    <li>
+                    <li
+                      @click="change_person_type(person.type)"
+                      v-for="(person, index) in person_type_list"
+                      :key="index"
+                    >
                       <div
                         class="flex items-center w-full my-1 border rounded hover:bg-gray-100"
                       >
-                        <input
-                          id="checkbox-item-11"
-                          type="hidden"
-                          value=""
-                          class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded-lg"
-                        /><label
+                        <label
                           for="checkbox-item-11"
-                          class="flex items-center justify-between w-full py-2 mr-2 text-sm font-medium text-gray-500 rounded"
-                          ><span class="flex items-center w-full pr-2 text-right"
-                            >شخص حقیقی - تبعه ایران</span
+                          class="flex cursor-pointer items-center justify-between w-full py-2 mr-2 text-sm font-medium text-gray-500 rounded"
+                          ><span class="flex items-center w-full pr-2 text-right">{{
+                            person.type
+                          }}</span
                           ><i
+                            v-if="person.type == registerData.seller_info.person_type"
                             class="flex items-center pl-2 text-left text-cyan-500 fa-solid fa-check"
-                          ></i
-                        ></label>
-                      </div>
-                    </li>
-                    <li>
-                      <div
-                        class="flex items-center w-full my-1 bg-cyan-500 border rounded hover:bg-gray-100"
-                      >
-                        <input
-                          id="checkbox-item-11"
-                          type="hidden"
-                          value=""
-                          class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded-lg"
-                        /><label
-                          for="checkbox-item-11"
-                          class="flex items-center justify-between w-full py-2 mr-2 text-sm font-medium text-white transition-colors rounded hover:text-gray-600"
-                          ><span class="flex items-center w-full pr-2 text-right"
-                            >شخص حقیقی - اتباع خارجی</span
-                          ><i
-                            class="flex items-center pl-2 text-left fa-solid fa-check"
-                          ></i
-                        ></label>
-                      </div>
-                    </li>
-                    <li>
-                      <div
-                        class="flex items-center w-full my-1 bg-cyan-500 border rounded hover:bg-gray-100"
-                      >
-                        <input
-                          id="checkbox-item-11"
-                          type="hidden"
-                          value=""
-                          class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded-lg"
-                        /><label
-                          for="checkbox-item-11"
-                          class="flex items-center justify-between w-full py-2 mr-2 text-sm font-medium text-white transition-colors rounded hover:text-gray-600"
-                          ><span class="flex items-center w-full pr-2 text-right"
-                            >شخص حقوقی - تجاری</span
-                          ><i
-                            class="flex items-center pl-2 text-left fa-solid fa-check"
-                          ></i
-                        ></label>
-                      </div>
-                    </li>
-                    <li>
-                      <div
-                        class="flex items-center w-full my-1 bg-cyan-500 border rounded hover:bg-gray-100"
-                      >
-                        <input
-                          id="checkbox-item-11"
-                          type="hidden"
-                          value=""
-                          class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded-lg"
-                        /><label
-                          for="checkbox-item-11"
-                          class="flex items-center justify-between w-full py-2 mr-2 text-sm font-medium text-white transition-colors rounded hover:text-gray-600"
-                          ><span class="flex items-center w-full pr-2 text-right"
-                            >شخص حقوقی - غیر تجاری</span
-                          ><i
-                            class="flex items-center pl-2 text-left fa-solid fa-check"
-                          ></i
-                        ></label>
-                      </div>
-                    </li>
-                    <li>
-                      <div
-                        class="flex items-center w-full my-1 bg-cyan-500 border rounded hover:bg-gray-100"
-                      >
-                        <input
-                          id="checkbox-item-11"
-                          type="hidden"
-                          value=""
-                          class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded-lg"
-                        /><label
-                          for="checkbox-item-11"
-                          class="flex items-center justify-between w-full py-2 mr-2 text-sm font-medium text-white transition-colors rounded hover:text-gray-600"
-                          ><span class="flex items-center w-full pr-2 text-right"
-                            >دولتی - نهادها و دستگاه های اجرایی</span
-                          ><i
-                            class="flex items-center pl-2 text-left fa-solid fa-check"
-                          ></i
-                        ></label>
+                          ></i>
+                        </label>
                       </div>
                     </li>
                   </ul>
@@ -350,8 +280,8 @@
             <label
               for="last-name"
               class="flex pb-2 pr-1 text-md font-medium text-gray-700"
-              ><span>شناسه ملی</span></label
-            >
+              ><span>شناسه ملی</span>
+            </label>
             <div class="flex mt-1 rounded-md">
               <div class="relative flex items-stretch flex-grow focus-within:z-10">
                 <div
@@ -362,7 +292,8 @@
                   ></i>
                 </div>
                 <input
-                  type="text"
+                  type="number"
+                  v-model="registerData.seller_info.shenase_melli"
                   class="block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-md p-4"
                   placeholder="شناسه ملی"
                 />
@@ -385,7 +316,8 @@
                   ></i>
                 </div>
                 <input
-                  type="text"
+                  type="number"
+                  v-model="registerData.seller_info.code_eghtesadi"
                   class="block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-md p-4"
                   placeholder="کد اقتصادی"
                 />
@@ -407,7 +339,11 @@
                   IR
                 </div>
                 <input
+                  v-model="registerData.seller_info.shabanumber"
                   type="text"
+                  maxlength="24"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
                   class="block w-full pl-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 text-md p-4 rtl:text-left"
                   placeholder="000000000000000000000000"
                 />
@@ -433,6 +369,7 @@
                   </div>
                   <input
                     type="text"
+                    v-model="registerData.seller_info.store_name"
                     class="block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 p-4 text-md text-right"
                     placeholder="مانند : آذرخش ، پارک و ..."
                   />
@@ -443,7 +380,7 @@
 
           <div class="relative md:col-span-1 col-span-4">
             <button
-              href="#_"
+              @click="add_seller_info()"
               class="box-border relative z-0 inline-flex iteme-center justify-center w-full p-3 px-8 py-3 my-2 overflow-hidden font-medium text-white transition-all duration-300 bg-cyan-500 rounded-md cursor-pointer group ease focus:outline-none"
             >
               <span
@@ -466,10 +403,18 @@
 
 <script setup>
 const props = defineProps(["registerData"]);
-const emit = defineEmits(["go_to_back", "verify_seller_info"]);
+const emit = defineEmits(["go_to_back", "verify_seller_info", "change_person_type"]);
 onMounted(() => {
   // console.log(props.sellerType);
 });
+
+const personTypeListState = ref(false);
+
+const person_type_list = reactive([
+  { type: "شخص حقوقی - تجاری" },
+  { type: "شخص حقوقی - غیر تجاری" },
+  { type: "دولتی - نهادها و دستگاه های اجرایی" },
+]);
 
 const go_to_back = () => {
   emit("go_to_back", "0,0");
@@ -477,5 +422,10 @@ const go_to_back = () => {
 
 const add_seller_info = () => {
   emit("verify_seller_info");
+};
+
+const change_person_type = (personType) => {
+  emit("change_person_type", personType);
+  personTypeListState.value = false;
 };
 </script>

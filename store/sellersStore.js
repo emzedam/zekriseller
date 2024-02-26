@@ -73,6 +73,90 @@ const actions = {
         }else{
             return false
         }
+    },
+    async load_states_list(){
+        const result = await api.get("/sellers/geocoding/states-list")
+        if(result.status == 200){
+            if(result.data){
+                return result.data
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return {
+                "message": "failed"
+            }
+        }
+    },
+    async load_cities_list(data){
+        const result = await api.post("/sellers/geocoding/cities-list" , {
+            state_name: data.state_name
+        })
+        if(result.status == 200){
+            if(result.data){
+                return result.data
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return {
+                "message": "failed"
+            }
+        }
+    },
+    async get_videos_list() {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.get("/sellers/learning/get-list" , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
+    async get_seller_questions_list() {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.get("/sellers/questions/get-list" , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
     }
 }
 

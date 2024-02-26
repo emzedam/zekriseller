@@ -21,7 +21,7 @@
                 <i
                   class="fa-light text-white"
                   v-if="progress.checked == false"
-                  :class="`fa-${progress.icon}`"
+                  :class="progress.checked == false ? `fa-${progress.icon}` : 'fa-check'"
                 ></i>
                 <i
                   class="fa-light text-white fa-check bg-cyan-500"
@@ -39,7 +39,12 @@
               </div>
             </div>
           </div>
-          <div class="relative pb-8" v-for="(child, key) in progress.childs" :key="key">
+          <div
+            class="relative pb-8"
+            v-if="progress.childs.length != 0"
+            v-for="(child, key) in progress.childs"
+            :key="key"
+          >
             <span
               class="absolute top-5 right-5 -mr-px h-full w-0.5 bg-gray-200"
               aria-hidden="true"
