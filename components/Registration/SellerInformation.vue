@@ -1,7 +1,11 @@
 <template>
   <div
-    class="Step-reg-2 border lg:rounded-lg p-6 h-full"
-    v-if="registerData.seller_type == 0"
+    class="Step-reg-2 border lg:rounded-lg p-6 w-full h-full absolute transition-all"
+    :class="
+      registerData.seller_type == 0 && activeComponent == 'SellerInformation'
+        ? 'top-0'
+        : 'top-[900px]'
+    "
   >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span
@@ -31,7 +35,7 @@
       </div>
     </div>
 
-    <div class="inline-block w-full input">
+    <div class="inline-block w-full input" v-if="registerData.length != 0">
       <div class="relative rounded-md">
         <div class="grid grid-cols-4 gap-6">
           <div class="relative col-span-4 md:col-span-2">
@@ -145,9 +149,6 @@
             >
               <li>نام مقدس مانند نام ائمه</li>
               <li>نام برند مانند نایک، چرم مشهد و...</li>
-              <li>واژه‌های عامیانه مانند خَفَن، باحال و...</li>
-              <li>واژه‌های تکراری</li>
-              <li>اعداد</li>
             </ul>
           </div>
 
@@ -175,8 +176,12 @@
   </div>
 
   <div
-    class="Step-reg-company border lg:rounded-lg p-6 h-full"
-    v-if="registerData.seller_type == 1"
+    class="Step-reg-company border lg:rounded-lg p-6 h-full w-full absolute transition-all"
+    :class="
+      registerData.seller_type == 1 && activeComponent == 'SellerInformation'
+        ? 'top-0'
+        : 'top-[900px]'
+    "
   >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span
@@ -189,7 +194,7 @@
       <span class="leading-3">لطفا اطلاعات کسب‌ و‌ کارتان را وارد کنید </span>
     </h2>
 
-    <div class="inline-block w-full input py-8">
+    <div class="inline-block w-full input py-8" v-if="registerData.length != 0">
       <div class="relative rounded-md">
         <div class="grid grid-cols-4 gap-6">
           <div class="relative col-span-4 sm:col-span-2">
@@ -402,7 +407,7 @@
 </template>
 
 <script setup>
-const props = defineProps(["registerData"]);
+const props = defineProps(["registerData", "activeComponent"]);
 const emit = defineEmits(["go_to_back", "verify_seller_info", "change_person_type"]);
 onMounted(() => {
   // console.log(props.sellerType);

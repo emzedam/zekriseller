@@ -1,0 +1,25 @@
+[
+    {
+        "id":1,
+        "withdrawId": 93681,
+        "isPayed": true,
+        "withdrawCheck": "---",
+        "withdrawName": "تسویه حساب",
+        "withdrawStatus": "پرداخت شده",
+        "withdrawCreate": "1401/02/28",
+        "withdrawMassage": "لطفا مبلغ 35 هزار تومان به حساب من واریز کنید",
+        "withdrawTotal": "528,000,000",
+        "withdrawCurrency": "﷼"
+    },   {
+        "id":1,
+        "withdrawId": 93681,
+        "isPayed": false,
+        "withdrawCheck": "---",
+        "withdrawName": "تسویه حساب",
+        "withdrawStatus": "پرداخت شده",
+        "withdrawCreate": "1401/02/28",
+        "withdrawMassage": "لطفا مبلغ 35 هزار تومان به حساب من واریز کنید",
+        "withdrawTotal": "528,000,000",
+        "withdrawCurrency": "﷼"
+    }
+]

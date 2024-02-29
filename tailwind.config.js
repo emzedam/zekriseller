@@ -5,7 +5,6 @@ module.exports = {
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
-    "./app.vue",
   ],
   theme: {
     darkMode: ["class", '[data-mode=""]'],
@@ -66,17 +65,13 @@ module.exports = {
         "Arial",
         "sans-serif",
       ],
-      fa: ["Binto"],
-      fas: ["IRANSans"]
+      iransans: ["iransans"],
+      yekan: ["yekan-bakh-new"],
+      fa: ["yekan-bakh-new"],
+
       
     },
     colors: {
-      nightbg:"#26283b",
-      nightbox:"#303248",
-      primary: "#22c55e",
-      muted:"#64748b",
-      secondary: "#fb923c",
-      main: "#eff1f5",
       transparent: "transparent",
       black: "#000000",
       white: "#ffffff",
@@ -381,25 +376,11 @@ module.exports = {
       },
     },
 
-    extend: {
-      transitionProperty: {
-        height: "height",
-      },
-      animation: {
-        wiggle: "wiggle 1s ease-in-out infinite",
-      },
-    },
-  },
-
-  extend: {
-    animation: ["group-hover"],
-    animation: ["animate-fadeIn"],
-
 
   },
+
+
   plugins: [
-    require("autoprefixer"),
-    require("tailwindcss"),
     require("@tailwindcss/forms"),
     require("tailwind-scrollbar"),
     require("tailwindcss-writing-mode")({

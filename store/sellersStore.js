@@ -75,7 +75,7 @@ const actions = {
         }
     },
     async load_states_list(){
-        const result = await api.get("/sellers/geocoding/states-list")
+        const result = await api.get("/sellers/registration/geocoding/states-list")
         if(result.status == 200){
             if(result.data){
                 return result.data
@@ -91,7 +91,7 @@ const actions = {
         }
     },
     async load_cities_list(data){
-        const result = await api.post("/sellers/geocoding/cities-list" , {
+        const result = await api.post("/sellers/registration/geocoding/cities-list" , {
             state_name: data.state_name
         })
         if(result.status == 200){
@@ -111,7 +111,7 @@ const actions = {
     async get_videos_list() {
         let token = cookies.get("seller-token") || "";
         if(token != ""){
-            const result = await api.get("/sellers/learning/get-list" , {
+            const result = await api.get("/sellers/registration/learning/get-list" , {
                 headers: {
                     Authorization:`Bearer ${token}`
                 }
@@ -136,7 +136,32 @@ const actions = {
     async get_seller_questions_list() {
         let token = cookies.get("seller-token") || "";
         if(token != ""){
-            const result = await api.get("/sellers/questions/get-list" , {
+            const result = await api.get("/sellers/registration/questions/get-list" , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
+    async register_seller(data) {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/registration/save-request" , data , {
                 headers: {
                     Authorization:`Bearer ${token}`
                 }

@@ -1,5 +1,8 @@
 <template>
-  <div class="Step-reg-1">
+  <div
+    :class="activeComponent == 'SellerState' ? 'top-0' : 'top-[900px]'"
+    class="Step-reg-1 absolute transition-all"
+  >
     <div
       class="grid lg:grid-cols-2 grid-cols-1 gap-4 mb-6 text-center justify-center mt-4"
     >
@@ -72,6 +75,7 @@
 </template>
 
 <script setup>
+const props = defineProps(["activeComponent"]);
 const emit = defineEmits(["change_seller_type"]);
 
 const change_seller_type = (type) => {

@@ -1,5 +1,8 @@
 <template>
-  <div class="Step-reg-map border lg:rounded-lg p-6 h-full">
+  <div
+    :class="activeComponent == 'SellerQuestions' ? 'top-0' : 'top-[900px]'"
+    class="Step-reg-map border absolute transition-all w-full lg:rounded-lg p-6 h-full"
+  >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span
         @click="go_to_back()"
@@ -51,7 +54,7 @@
           </div>
 
           <div class="flex items-center">
-            <p class="text-body-2 color-n-700 ml-2 w-[77px]">
+            <p class="text-body-2 color-n-700 ml-2 w-[86px]">
               سوال {{ index + 1 }} از {{ question_list.length }}
             </p>
             <div
@@ -103,7 +106,7 @@
 
 <script setup>
 import { useSellersStore } from "~/store/sellersStore.js";
-const props = defineProps(["question_list", "question_values"]);
+const props = defineProps(["question_list", "question_values", "activeComponent"]);
 const emit = defineEmits(["go_to_back", "go_final_level"]);
 const sellerStore = useSellersStore();
 const questionStep = ref(0);

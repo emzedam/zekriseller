@@ -1,5 +1,8 @@
 <template>
-  <div class="Step-reg-map border lg:rounded-lg p-6 h-full">
+  <div
+    :class="activeComponent == 'SellerLocation' ? 'top-0' : 'top-[900px]'"
+    class="Step-reg-map border lg:rounded-lg p-6 h-full w-full absolute transition-all"
+  >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span
         @click="go_to_back()"
@@ -11,7 +14,7 @@
       <span class="leading-3">انتخاب موقعیت مکانی روی نقشه</span>
     </h2>
 
-    <div class="inline-block w-full input py-8">
+    <div class="inline-block w-full input py-8" v-if="registerData.length != 0">
       <div class="relative rounded-md">
         <div
           class="modal-body font-fa relative overflow-hidden h-full bg-white rounded-b-lg"
@@ -20,7 +23,7 @@
             id="map"
             class="h-96 w-full bg-cyan-100 relative rounded-lg overflow-hidden"
           >
-            <form class="relative z-10 px-6 py-4" style="font-family: 'Binto'">
+            <form class="relative z-10 px-6 py-4" style="font-family: 'yekan-bakh-new'">
               <div class="relative lg:w-2/4">
                 <div
                   class="absolute inset-y-0 left-4 flex items-center pr-3 pointer-events-none z-10"
@@ -62,7 +65,7 @@
             </form>
 
             <transition-group name="slide">
-              <div style="font-family: 'Binto'" key="123">
+              <div style="font-family: 'yekan-bakh-new'" key="123">
                 <div
                   :class="showMapForm == false ? 'right-[-900px]' : 'right-0'"
                   class="bg-white w-full lg:w-2/4 h-screen absolute transition-all top-0 z-10 rounded-r-lg p-6"
@@ -317,14 +320,16 @@
           >
             <span
               class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"
-            ></span
-            ><span
+            ></span>
+            <span
               class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"
-            ></span
-            ><span
+            ></span>
+            <span
               class="relative z-20 flex iteme-center justify-center w-full text-center"
-              ><span class="w-full">تایید و ادامه</span></span
             >
+              <span class="w-full" v-if="reverseLoading == false">تایید و ادامه</span>
+              <div class="loader" v-if="reverseLoading == true"></div>
+            </span>
           </button>
           <!-- وقتی از روی نقشه مکان رو انتخاب کرد هنگامی که روی دکمه تایید کلیک کرد از طرف راست مثل دی جی کالا قسمت فروشندگان فرم ادرس باز میشه میتونه همون لحظه روی نقشه ادرس رو اصلاح کنه -->
         </div>
@@ -338,7 +343,7 @@ import api from "~/axios";
 import { useToast } from "vue-toastification";
 import { useSellersStore } from "~/store/sellersStore.js";
 
-const props = defineProps(["registerData"]);
+const props = defineProps(["registerData", "activeComponent"]);
 const toast = useToast();
 const emit = defineEmits(["go_to_back", "change_to_next_level"]);
 const mapCenter = ref([51.38866839337672, 35.69080481760244]);
@@ -351,6 +356,7 @@ const statesStatus = ref(false);
 const cityStatus = ref(false);
 const citiesList = ref([]);
 const sellerStore = useSellersStore();
+const reverseLoading = ref(false);
 
 onMounted(() => {
   map_init();
@@ -397,7 +403,7 @@ const map_init = () => {
 const keyUpSearchText = async (e) => {
   if (e.target.value != "") {
     if (sellerToken.value != undefined) {
-      let requestUrl = `https://api.zekrimarket.com/api/sellers/geocoding/suggests`;
+      let requestUrl = `https://api.zekrimarket.com/api/sellers/registration/geocoding/suggests`;
       const result = await api.post(
         requestUrl,
         {
@@ -437,6 +443,7 @@ const clickedOnAddress = async (address) => {
 const show_map_form_and_submit = async () => {
   if (buttonStatus.value == true) {
     if (showMapForm.value == false) {
+      reverseLoading.value = true;
       await reverse_geocode();
       showMapForm.value = true;
     } else {
@@ -461,7 +468,7 @@ const show_map_form_and_submit = async () => {
 };
 
 const reverse_geocode = async () => {
-  let requestUrl = `https://api.zekrimarket.com/api/sellers/geocoding/reverse-geocode`;
+  let requestUrl = `https://api.zekrimarket.com/api/sellers/registration/geocoding/reverse-geocode`;
   const result = await api.post(
     requestUrl,
     {
@@ -478,9 +485,12 @@ const reverse_geocode = async () => {
     if (result.status == 200) {
       if (result.data.statusCode == 200) {
         const addressObj = result.data.result;
+        reverseLoading.value = false;
         props.registerData.address.fullAddress = addressObj.formatted_address;
         props.registerData.address.state = addressObj.state;
         props.registerData.address.city = addressObj.city;
+        props.registerData.address.lat = mapCenter.value[1];
+        props.registerData.address.lng = mapCenter.value[0];
       } else if (result.data.statusCode == 401) {
         window.location.reload();
       }
@@ -489,7 +499,7 @@ const reverse_geocode = async () => {
 };
 
 watch(
-  () => props.registerData.address.state,
+  () => (props.registerData.length != 0 ? props.registerData.address.state : null),
   async (newVal, oldVal) => {
     const loadCitiesList = await sellerStore.load_cities_list({
       state_name: newVal,
@@ -519,5 +529,46 @@ const skip_this_level = () => {
 .mapboxgl-ctrl-top-left,
 .mapboxgl-ctrl-top-right {
   z-index: 10000000 !important;
+}
+
+.loader {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite;
+}
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  animation: prixClipFix 2s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes prixClipFix {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+  }
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+  }
 }
 </style>

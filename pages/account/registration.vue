@@ -6,15 +6,15 @@
       <div class="lg:p-6 lg:col-span-9 col-span-12">
         <MobileLineProgress />
 
-        <div>
+        <div class="overflow-hidden relative w-full h-full">
           <SellerState
-            v-if="activeComponent.name == 'SellerState'"
+            :activeComponent="activeComponent.name"
             @change_seller_type="(type) => change_seller_type(type)"
           />
 
           <SellerInformation
-            v-if="activeComponent.name == 'SellerInformation'"
-            :registerData="register_data"
+            :activeComponent="activeComponent.name"
+            :registerData="seller_register_data != undefined ? seller_register_data : []"
             @go_to_back="(to) => do_go_to_back(to)"
             @verify_seller_info="add_seller_info()"
             @change_person_type="(personType) => do_change_person_type(personType)"
@@ -22,34 +22,35 @@
 
           <SellerLocation
             @go_to_back="(to) => do_go_to_back(to)"
-            v-if="activeComponent.name == 'SellerLocation'"
-            :registerData="register_data"
+            :activeComponent="activeComponent.name"
+            :registerData="seller_register_data != undefined ? seller_register_data : []"
             @change_to_next_level="go_to_next_level()"
           />
 
-          <!-- <transition-group name="list" tag="div"> -->
           <SellerLearnVideo
             @go_to_back="(to) => do_go_to_back(to)"
-            v-if="activeComponent.name == 'SellerLearnVideo'"
+            :activeComponent="activeComponent.name"
             @change_to_next_level="(status) => go_from_learn_video_to_next(status)"
           />
-          <!-- </transition-group> -->
 
           <SellerQuestions
             @go_to_back="(to) => do_go_to_back(to)"
             :question_list="questionList.length != 0 ? questionList : []"
             :question_values="
+              seller_register_data != undefined &&
               seller_register_data.questions.length != 0
                 ? seller_register_data.questions
                 : []
             "
             @go_final_level="change_level_to_final()"
-            v-if="activeComponent.name == 'SellerQuestions'"
+            :activeComponent="activeComponent.name"
           />
+
           <SellerGoPanel
             @go_to_back="(to) => do_go_to_back(to)"
+            :registerLoading="registerLoading"
             @register_seller="do_register_seller()"
-            v-if="activeComponent.name == 'SellerGoPanel'"
+            :activeComponent="activeComponent.name"
           />
 
           <!-- <component :is="" :sellerType="0" /> -->
@@ -64,7 +65,7 @@ import { onMounted } from "vue";
 import { useSellersStore } from "~/store/sellersStore";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
-
+import { useRouter } from "vue-router";
 import DesktopLineProgress from "@/components/Registration/DesktopLineProgress.vue";
 import MobileLineProgress from "@/components/Registration/MobileLineProgress.vue";
 import SellerState from "@/components/Registration/SellerState.vue";
@@ -183,8 +184,9 @@ const registerOptions = reactive([
   },
 ]);
 const questionList = ref([]);
-
+const registerLoading = ref(false);
 const activeComponent = ref({ name: "SellerState" });
+const router = useRouter();
 
 let register_data = reactive({
   seller_type: 0,
@@ -206,6 +208,8 @@ let register_data = reactive({
     city: "",
     pelak: "",
     codePosti: "",
+    lat: "",
+    lng: "",
   },
   watched_learn_videos: false,
   questions: [],
@@ -216,12 +220,18 @@ definePageMeta({
 });
 
 watch(
-  () => register_data.seller_info.cardnumber,
+  () =>
+    seller_register_data.value != undefined
+      ? seller_register_data.value.seller_info.cardnumber
+      : null,
   (newVal, oldVal) => {
     if (newVal != "") {
-      let realNumber = register_data.seller_info.cardnumber.replace(/-/gi, "");
+      let realNumber = seller_register_data.value.seller_info.cardnumber.replace(
+        /-/gi,
+        ""
+      );
       let dashedNumber = realNumber.match(/.{1,4}/g);
-      register_data.seller_info.cardnumber = dashedNumber.join("-");
+      seller_register_data.value.seller_info.cardnumber = dashedNumber.join("-");
     }
   }
 );
@@ -235,8 +245,8 @@ onMounted(async () => {
     currentLevel.value = "0,0";
   }
 
-  if (seller_register_data.value != undefined) {
-    register_data = seller_register_data.value;
+  if (seller_register_data.value == undefined) {
+    seller_register_data.value = register_data;
   }
 
   specific_current_level();
@@ -280,8 +290,7 @@ const specific_current_level = () => {
 };
 
 const change_seller_type = (type) => {
-  register_data.seller_type = type;
-  seller_register_data.value = register_data;
+  seller_register_data.value.seller_type = type;
 
   let levelArr = currentLevel.value.split(",");
   registerInformation.value[levelArr[0]].childs[levelArr[1]].checked = true;
@@ -301,100 +310,89 @@ const do_go_to_back = (to) => {
 };
 
 const add_seller_info = () => {
-  if (register_data.seller_type == 0) {
+  if (seller_register_data.value.seller_type == 0) {
     //check codemelli validate
-    if (register_data.seller_info.codemelli == "") {
+    if (seller_register_data.value.seller_info.codemelli == "") {
       toast.error("لطفا کد ملی خود را وارد کنید");
       return false;
     }
-    if (!/^[0-9]{10}$/.test(register_data.seller_info.codemelli)) {
+    if (!/^[0-9]{10}$/.test(seller_register_data.value.seller_info.codemelli)) {
       toast.error("کد ملی وارد شده معتبر نمیباشد");
       return false;
     }
-
     // check cardnumber validate
-    if (register_data.seller_info.cardnumber != "") {
+    if (seller_register_data.value.seller_info.cardnumber != "") {
       if (
         !/^[0-9]{16}$/.test(
-          parseInt(register_data.seller_info.cardnumber.split("-").join(""))
+          parseInt(seller_register_data.value.seller_info.cardnumber.split("-").join(""))
         )
       ) {
         toast.error("شماره کارت معتبر نمیباشد");
         return false;
       }
     }
-
     // check shabanumber validate
-    if (register_data.seller_info.shabanumber != "") {
-      if (!/^[0-9]{24}$/.test(register_data.seller_info.shabanumber)) {
+    if (seller_register_data.value.seller_info.shabanumber != "") {
+      if (!/^[0-9]{24}$/.test(seller_register_data.value.seller_info.shabanumber)) {
         toast.error("شماره شبا معتبر نمیباشد");
         return false;
       }
     }
-
     // check store name validate
-    if (register_data.seller_info.store_name == "") {
+    if (seller_register_data.value.seller_info.store_name == "") {
       toast.error("نام فروشگاه الزامی میباشد");
       return false;
     }
   }
-
-  if (register_data.seller_type == 1) {
+  if (seller_register_data.value.seller_type == 1) {
     // check store name validate
-    if (register_data.seller_info.company_name == "") {
+    if (seller_register_data.value.seller_info.company_name == "") {
       toast.error("نام ثبت شده شرکت الزامی میباشد");
       return false;
     }
-
     //check person type validate
-    if (register_data.seller_info.person_type == "") {
+    if (seller_register_data.value.seller_info.person_type == "") {
       toast.error("لطفا نوع شخصیت خود را انتخاب کنید");
       return false;
     }
-
     //check codemelli validate
-    if (register_data.seller_info.shenase_melli == "") {
+    if (seller_register_data.value.seller_info.shenase_melli == "") {
       toast.error("لطفا شناسه ملی خود را وارد کنید");
       return false;
     }
-    if (!/^[0-9]{10}$/.test(register_data.seller_info.shenase_melli)) {
+    if (!/^[0-9]{10}$/.test(seller_register_data.value.seller_info.shenase_melli)) {
       toast.error("شناسه ملی وارد شده معتبر نمیباشد");
       return false;
     }
-
     // check validate code eghtesadi
-    if (register_data.seller_info.code_eghtesadi != "") {
-      if (!/^[0-9]$/.test(register_data.seller_info.code_eghtesadi)) {
+    if (seller_register_data.value.seller_info.code_eghtesadi != "") {
+      if (!/^[0-9]$/.test(seller_register_data.value.seller_info.code_eghtesadi)) {
         toast.error("کد اقتصادی وارد شده معتبر نمیباشد");
         return false;
       }
     }
-
     // check shabanumber validate
-    if (register_data.seller_info.shabanumber != "") {
-      if (!/^[0-9]{24}$/.test(register_data.seller_info.shabanumber)) {
+    if (seller_register_data.value.seller_info.shabanumber != "") {
+      if (!/^[0-9]{24}$/.test(seller_register_data.value.seller_info.shabanumber)) {
         toast.error("شماره شبا معتبر نمیباشد");
         return false;
       }
     }
-
     // check store name validate
-    if (register_data.seller_info.store_name == "") {
+    if (seller_register_data.value.seller_info.store_name == "") {
       toast.error("نام فروشگاه الزامی میباشد");
       return false;
     }
   }
-
   let levelArr = currentLevel.value.split(",");
   registerInformation.value[levelArr[0]].childs[levelArr[1]].checked = true;
-
   currentLevel.value = "1,0";
   specific_current_level();
   recheck_road_state();
 };
 
 const do_change_person_type = (personType) => {
-  register_data.seller_info.person_type = personType;
+  seller_register_data.value.seller_info.person_type = personType;
 };
 
 const go_to_next_level = () => {
@@ -410,7 +408,7 @@ const go_from_learn_video_to_next = (status) => {
   let levelArr = currentLevel.value.split(",");
   registerInformation.value[levelArr[0]].childs[levelArr[1]].checked = true;
 
-  register_data.watched_learn_videos = status;
+  seller_register_data.value.watched_learn_videos = status;
 
   currentLevel.value = "3,0";
   specific_current_level();
@@ -431,7 +429,7 @@ const get_question_items_list = async () => {
         },
       ];
     });
-    register_data.questions = value_array;
+    seller_register_data.value.questions = value_array;
   } else if (result.status == 401) {
     window.location.href = "/account/signin";
   }
@@ -445,19 +443,44 @@ const change_level_to_final = () => {
   recheck_road_state();
 };
 
-const do_register_seller = () => {
-  console.log(seller_register_data.value);
+const do_register_seller = async () => {
+  //   console.log(seller_register_data.value);
+  registerLoading.value = true;
+  const result = await sellerStore.register_seller(seller_register_data.value);
+  if (result.status == 200) {
+    seller_register_data.value = undefined;
+    currentLevel.value = undefined;
+    registerInformation.value = undefined;
+    registerLoading.value = false;
+
+    toast.success("به پنل مدیریت فروشندگی خود خوش آمدید");
+
+    router.push("/");
+  } else if (result.status == 401) {
+    toast.error(result.message);
+    window.location.href = "/account/signin";
+  } else {
+    toast.error(result.message);
+  }
 };
 </script>
 
 <style>
+.list-move, /* apply transition to moving elements */
 .list-enter-active,
 .list-leave-active {
   transition: all 0.5s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
 }
 </style>

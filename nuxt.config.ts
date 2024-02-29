@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   mapbox: {
     accessToken: 'pk.eyJ1IjoiaHNuZW16ZWQiLCJhIjoiY2xvcGdxOTI4MGEweTJpazRmM2JsYjA5YSJ9.8eqD-GBF4CO9Ma8aSYlM8A'
   },
-  css: ['~/assets/css/main.css','~/assets/css/fonts/icons/icons.css','~/assets/css/fonts/iconmarket.css'],
+  css: ['~/assets/css/main.css','~/assets/fonts/icons.css'],
   app: {
     head: {
       charset: 'utf-8',

@@ -19,7 +19,7 @@ const { loading } = storeToRefs(useSellersStore());
 .Vue-Toastification__toast {
   max-width: 399px !important;
   direction: rtl !important;
-  font-family: "Binto" !important;
+  font-family: "yekan-bakh-new" !important;
 }
 .Vue-Toastification__icon {
   margin-right: 0 !important;

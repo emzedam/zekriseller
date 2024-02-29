@@ -1,7 +1,10 @@
 <template>
   <!-- ==============  آموزش ====================== -->
-  <div class="lg:col-span-9">
-    <div class="lg:rounded-md relative mb-4 border h-full">
+  <div
+    :class="activeComponent == 'SellerLearnVideo' ? 'top-0' : 'top-[900px]'"
+    class="lg:col-span-9 w-full absolute transition-all"
+  >
+    <div class="lg:rounded-md w-full mb-4 border h-full">
       <h2
         class="flex items-center justify-start gap-4 text-2xl font-semibold p-4 border-b"
       >
@@ -157,6 +160,7 @@
 
 <script setup>
 import { useSellersStore } from "~/store/sellersStore.js";
+const props = defineProps(["activeComponent"]);
 const emit = defineEmits(["go_to_back", "change_to_next_level"]);
 const sellerStore = useSellersStore();
 const videoesList = ref([]);

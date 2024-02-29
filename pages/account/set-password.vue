@@ -42,7 +42,7 @@
                       تعیین رمز</label
                     >
                     <input
-                      type="passeord"
+                      type="password"
                       name="name"
                       id="name"
                       class="w-full border-0 p-0 text-gray-900 outline-none placeholder-gray-500 focus:ring-0 sm:text-sm pl-8 text-left flex items-center leading-3 pt-2"

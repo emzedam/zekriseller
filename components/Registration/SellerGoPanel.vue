@@ -1,5 +1,8 @@
 <template>
-  <div class="Step-reg-map p-6 h-full">
+  <div
+    :class="activeComponent == 'SellerGoPanel' ? 'top-0' : 'top-[900px]'"
+    class="Step-reg-map p-6 h-full absolute transition-all w-full"
+  >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span
         @click="go_to_back()"
@@ -30,15 +33,19 @@
           ><span
             class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"
           ></span
-          ><span class="relative z-20 flex iteme-center justify-center w-full text-center"
-            ><span class="w-full">ورود به پنل</span></span
+          ><span
+            class="relative z-20 flex iteme-center justify-center w-full text-center"
           >
+            <span class="w-full" v-if="registerLoading == false">ورود به پنل</span>
+            <div class="loader" v-if="registerLoading == true"></div>
+          </span>
         </button>
       </div>
     </div>
   </div>
 </template>
 <script setup>
+const props = defineProps(["activeComponent", "registerLoading"]);
 const emit = defineEmits(["go_to_back", "register_seller"]);
 const go_to_back = () => {
   emit("go_to_back", "3,0");
