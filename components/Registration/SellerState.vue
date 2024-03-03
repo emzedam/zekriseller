@@ -1,7 +1,7 @@
 <template>
   <div
-    :class="activeComponent == 'SellerState' ? 'top-0' : 'top-[900px]'"
-    class="Step-reg-1 absolute transition-all"
+    :class="activeComponent == 'SellerState' ? 'top-0 visible' : 'top-[900px] invisible'"
+    class="overflow-y-scroll Step-reg-1 absolute transition-all"
   >
     <div
       class="grid lg:grid-cols-2 grid-cols-1 gap-4 mb-6 text-center justify-center mt-4"

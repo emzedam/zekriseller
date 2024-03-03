@@ -1,7 +1,9 @@
 <template>
   <div
-    :class="activeComponent == 'SellerQuestions' ? 'top-0' : 'top-[900px]'"
-    class="Step-reg-map border absolute transition-all w-full lg:rounded-lg p-6 h-full"
+    :class="
+      activeComponent == 'SellerQuestions' ? 'top-0 visible' : 'top-[900px] invisible'
+    "
+    class="overflow-y-scroll Step-reg-map border absolute transition-all w-full lg:rounded-lg p-6 h-full"
   >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span

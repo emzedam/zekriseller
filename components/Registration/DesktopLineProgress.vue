@@ -82,13 +82,4 @@
 
 <script setup>
 const props = defineProps(["registerInformation"]);
-// const registerInfo = useCookie("register-info");
-// const registerOptions = ref([]);
-// onMounted(() => {
-//   setTimeout(() => {
-//     if (registerInfo.value != undefined) {
-//       registerOptions.value = registerInfo.value;
-//     }
-//   }, 1000);
-// });
 </script>

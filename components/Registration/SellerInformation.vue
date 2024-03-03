@@ -1,10 +1,10 @@
 <template>
   <div
-    class="Step-reg-2 border lg:rounded-lg p-6 w-full h-full absolute transition-all"
+    class="Step-reg-2 border lg:rounded-lg p-6 w-full h-full absolute transition-all overflow-y-scroll"
     :class="
       registerData.seller_type == 0 && activeComponent == 'SellerInformation'
-        ? 'top-0'
-        : 'top-[900px]'
+        ? 'top-0 visible'
+        : 'top-[900px] invisible'
     "
   >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
@@ -176,11 +176,11 @@
   </div>
 
   <div
-    class="Step-reg-company border lg:rounded-lg p-6 h-full w-full absolute transition-all"
+    class="overflow-y-scroll Step-reg-company border lg:rounded-lg p-6 h-full w-full absolute transition-all"
     :class="
       registerData.seller_type == 1 && activeComponent == 'SellerInformation'
-        ? 'top-0'
-        : 'top-[900px]'
+        ? 'top-0 visible'
+        : 'top-[900px] invisible'
     "
   >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">

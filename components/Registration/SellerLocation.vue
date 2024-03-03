@@ -1,7 +1,9 @@
 <template>
   <div
-    :class="activeComponent == 'SellerLocation' ? 'top-0' : 'top-[900px]'"
-    class="Step-reg-map border lg:rounded-lg p-6 h-full w-full absolute transition-all"
+    :class="
+      activeComponent == 'SellerLocation' ? 'top-0 visible' : 'top-[900px] invisible'
+    "
+    class="overflow-y-scroll Step-reg-map border lg:rounded-lg p-6 h-full w-full absolute transition-all"
   >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span
@@ -21,7 +23,7 @@
         >
           <div
             id="map"
-            class="h-96 w-full bg-cyan-100 relative rounded-lg overflow-hidden"
+            class="h-[550px] lg:h-96 w-full bg-cyan-100 relative rounded-lg overflow-hidden"
           >
             <form class="relative z-10 px-6 py-4" style="font-family: 'yekan-bakh-new'">
               <div class="relative lg:w-2/4">
@@ -73,7 +75,7 @@
                   <div class="relative w-100 p-3">
                     <i
                       @click="showMapForm = false"
-                      class="fa fa-close text-red-500 absolute top-0 left-0 text-xl cursor-pointer"
+                      class="fa fa-close text-red-500 absolute top-0 left-[50px] lg:left-0 text-xl cursor-pointer"
                     ></i>
                   </div>
                   <div class="grid grid-cols-4 gap-4">

@@ -1,8 +1,10 @@
 <template>
   <!-- ==============  آموزش ====================== -->
   <div
-    :class="activeComponent == 'SellerLearnVideo' ? 'top-0' : 'top-[900px]'"
-    class="lg:col-span-9 w-full absolute transition-all"
+    :class="
+      activeComponent == 'SellerLearnVideo' ? 'top-0 visible' : 'top-[900px] invisible'
+    "
+    class="lg:col-span-9 w-full absolute transition-all overflow-y-scroll"
   >
     <div class="lg:rounded-md w-full mb-4 border h-full">
       <h2

@@ -6,7 +6,7 @@
     <Header/>
     <main class="pt-20">
     <div class="mx-auto py-4 px-5">
-    <Withdraw />
+    <addNewVitrin />
     </div>
     </main>
     <Footer/>
@@ -15,7 +15,7 @@
   </template>
   <script>
   import MenuRight from "@/components/MenuRight/menu.vue";
-  import Withdraw from "@/components/Withdraw/MoneyRequest.vue";
+  import addNewVitrin from "@/components/Vitrin/add-vitrin/addNewVitrin.vue";
   import CollapseTransition from "@/plugins/CollapseTransition.vue";
   import Header from "@/components/Header/header.vue";
   import Footer from "@/components/Footer/footer.vue";
@@ -23,7 +23,7 @@
   export default {
     components: {
       CollapseTransition,
-      Withdraw,
+      addNewVitrin,
       Header,
       Footer,
       MenuRight

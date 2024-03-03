@@ -1,0 +1,74 @@
+[
+    {
+        "id":1,
+        "productId": 93681,
+        "productIcon": "/10.png",
+        "productName": "لپ تاپ 15 اینچی اپل مدل MacBook Pro MJLQ2 با صفحه نمایش رتینا",
+        "productAdded": "محبوب حسین زاده",
+        "productStoke": [
+            {
+                "stock": {
+                    "name": "512",
+                    "number": "5"
+                }
+            },
+            {
+                "stock": {
+                    "name": "128",
+                    "number": "98"
+                }
+            }
+        ],
+        "productPrice": "250000 تومان",
+        "productCategories": "موبایل",
+        "productTags": ["موبایل","لپ تاپ"],
+        "productDate": "1401/02/28",
+        "productStatus":0,
+        "productFeatured": true,
+        "productOutStock": "/out-of-stock.svg",
+        "productCopy": "fa-thin fa-copy",
+        "productDelete": "fa-thin fa-trash-can",
+        "productEdit": "fa-thin fa-edit",
+        "productEye": "fa-thin fa-eye"
+    },
+    {
+        "id":1,
+        "productId": 93681,
+        "productIcon": "/10.png",
+        "productName": "لپ تاپ 15 اینچی اپل مدل MacBook Pro MJLQ2 با صفحه نمایش رتینا",
+        "productAdded": "محبوب حسین زاده",
+        "productStoke": false,
+        "productPrice": "250000 تومان",
+        "productCategories": "موبایل",
+        "productTags": ["موبایل","لپ تاپ"],
+        "productDate": "1401/02/28",
+        "productStatus": 1,
+        "productFeatured": true,
+        "productInStock": "/ready-stock.svg",
+        "productCopy": "fa-thin fa-copy",
+        "productDelete": "fa-thin fa-trash-can",
+        "productEdit": "fa-thin fa-edit",
+        "productEye": "fa-thin fa-eye"
+    },
+    {
+        "id":1,
+        "productId": 93681,
+        "productIcon": "/10.png",
+        "productName": "لپ تاپ 15 اینچی اپل مدل MacBook Pro MJLQ2 با صفحه نمایش رتینا",
+        "productAdded": "محبوب حسین زاده",
+        "productStoke": false,
+        "productPrice": "250000 تومان",
+        "productCategories": "موبایل",
+        "productTags": ["موبایل","لپ تاپ"],
+        "productDate": "1401/02/28",
+        "productStatus":0,
+        "productFeatured": true,
+        "productInStock": "/ready-stock.svg",
+        "productCopy": "fa-thin fa-copy",
+        "productDelete": "fa-thin fa-trash-can",
+        "productEdit": "fa-thin fa-edit",
+        "productEye": "fa-thin fa-eye"
+    }
+
+
+]

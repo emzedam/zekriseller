@@ -1,7 +1,9 @@
 <template>
   <div
-    :class="activeComponent == 'SellerGoPanel' ? 'top-0' : 'top-[900px]'"
-    class="Step-reg-map p-6 h-full absolute transition-all w-full"
+    :class="
+      activeComponent == 'SellerGoPanel' ? 'top-0 visible' : 'top-[900px] invisible'
+    "
+    class="overflow-y-scroll Step-reg-map p-6 h-full absolute transition-all w-full"
   >
     <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold mt-6 h-10">
       <span
@@ -16,7 +18,7 @@
 
     <div class="welcome border lg:rounded-lg mt-6 p-6">
       <p class="text-2xl font-semibold py-6 block text-center">
-        به خانواده بزرگ فروشندگان پتومن خوش آمدید!
+        به خانواده بزرگ فروشندگان ذکری مارکت خوش آمدید!
       </p>
       <div class="flex items-center justify-center py-8">
         <img src="@/assets/images/seller.png" class="w-72" />

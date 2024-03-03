@@ -12,6 +12,7 @@
 <script setup>
 import { useSellersStore } from "~/store/sellersStore";
 import { storeToRefs } from "pinia";
+
 const { loading } = storeToRefs(useSellersStore());
 </script>
 

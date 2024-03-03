@@ -1,56 +1,26 @@
 <template>
-  <div class="wrapper overflow-x-hidden bg-white dark:bg-">
-<MenuRight/>
-<div :class="NavMenu == true ? 'lg:mr-0 mr-0' : 'lg:mr-72 mr-0'"
-  class="flex flex-col  min-h-screen transition-all duration-500 ease-in-out ">
-  <Header/>
   <main class="pt-20">
-       <div class="mx-auto py-4 px-5">
-      <ListOrders/>
-      </div>
-  </main>
-      <Footer/>
+    <div class="mx-auto py-4 px-5">
+      <ListOrders />
     </div>
-  </div>
+  </main>
 </template>
-<script>
-import MenuRight from "@/components/MenuRight/menu.vue";
-import CollapseTransition from "@/plugins/CollapseTransition.vue";
-import Header from "@/components/Header/header.vue";
-import Footer from "@/components/Footer/footer.vue";
+<script setup>
+import { onMounted } from "vue";
+import { useSellersStore } from "~/store/sellersStore";
+import { storeToRefs } from "pinia";
 import ListOrders from "@/components/Orders/ListOrders.vue";
-export default {
-  components: {
-    CollapseTransition,
-    MenuRight,
-    Header,
-    ListOrders,
-    Footer,
 
-  },
+const { loading } = storeToRefs(useSellersStore());
 
-  data() {
-    return {
-      NavMenu: false,
-      profile: false,
-      Notification: false,
-      submenuIndex: null,
-      peyamha: false
-    }
-  },
+definePageMeta({
+  layout: "seller-layout",
+  middleware: "auth-dashboard",
+});
 
-  methods: {
-    openSubMenu(index) {
-      if (this.submenuIndex == index) {
-        this.submenuIndex = null;
-      } else {
-        this.submenuIndex = index;
-      }
-    }
-
-  },
-
-
-
-}
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 500);
+});
 </script>
