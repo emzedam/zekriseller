@@ -173,21 +173,90 @@
           </li>
 
           <li>
-            <RouterLink to="/vitrin">
-              <button
-                class="middle none font-fa font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 rounded-lg text-gray-500 active:opacity-[0.85] active:bg-green-50/20 focus:bg-gray-100 focus:text-gray-500 w-full flex justify-between items-center gap-4 px-4 capitalize"
-                type="button"
+            <button
+              @click="openSubMenu(2)"
+              class="middle none font-fa font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 rounded-lg text-gray-500 active:opacity-[0.85] active:bg-green-50/20 focus:bg-gray-100 focus:text-gray-500 w-full flex justify-between items-center gap-4 px-4 capitalize"
+              type="button"
+            >
+              <span class="pr-1">
+                <i class="fa-light fa-layer-group text-[18px] text-slate-500"></i>
+              </span>
+              <p
+                class="block w-full text-base antialiased font-medium leading-relaxed text-right capitalize font-fa"
               >
-                <span class="pr-1">
-                  <i class="fa-light fa-gear text-[18px] text-slate-500"></i>
-                </span>
-                <p
-                  class="block w-full text-base antialiased font-medium leading-relaxed text-right capitalize font-fa"
+                مدیریت ویترین
+              </p>
+              <i
+                :class="submenuIndex == 2 ? 'fa-chevron-down' : 'fa-chevron-left'"
+                class="fa-light text-[15px] text-slate-500"
+              ></i>
+            </button>
+
+            <!-- Dropdown menu -->
+            <collapse-transition>
+              <div class="z-10 px-1 font-fa" v-if="submenuIndex == 2">
+                <ul
+                  class="text-sm text-gray-700 dark:text-gray-400"
+                  aria-labelledby="dropdownNavbarButton"
                 >
-                  ویترین فروشگاه
-                </p>
-              </button>
-            </RouterLink>
+                  <li>
+                    <RouterLink to="/vitrin/add-vitrin">
+                      <span
+                        class="flex items-center justify-between w-full gap-4 px-4 py-2 text-xs font-bold text-gray-500 capitalize transition-all rounded-lg middle none font-fa center disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none bg-gradient-to-r"
+                      >
+                        <span class="pr-1">
+                          <i
+                            class="fa-light fa-draw-circle text-[12px] text-gray-500"
+                          ></i>
+                        </span>
+                        <p
+                          class="block w-full text-base antialiased font-medium leading-relaxed text-right capitalize font-fa"
+                        >
+                          ایجاد ویترین جدید
+                        </p>
+                      </span>
+                    </RouterLink>
+                  </li>
+                  <li>
+                    <RouterLink to="/vitrin/vitrins">
+                      <span
+                        class="flex items-center justify-between w-full gap-4 px-4 py-2 text-xs font-bold text-gray-500 capitalize transition-all rounded-lg middle none font-fa center disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none bg-gradient-to-r"
+                      >
+                        <span class="pr-1">
+                          <i
+                            class="fa-light fa-draw-circle text-[12px] text-gray-500"
+                          ></i>
+                        </span>
+                        <p
+                          class="block w-full text-base antialiased font-medium leading-relaxed text-right capitalize font-fa"
+                        >
+                          لیست ویترین
+                        </p>
+                      </span>
+                    </RouterLink>
+                  </li>
+
+                  <li>
+                    <RouterLink to="/vitrin/setting-vitrin">
+                      <span
+                        class="flex items-center justify-between w-full gap-4 px-4 py-2 text-xs font-bold text-gray-500 capitalize transition-all rounded-lg middle none font-fa center disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none bg-gradient-to-r"
+                      >
+                        <span class="pr-1">
+                          <i
+                            class="fa-light fa-draw-circle text-[12px] text-gray-500"
+                          ></i>
+                        </span>
+                        <p
+                          class="block w-full text-base antialiased font-medium leading-relaxed text-right capitalize font-fa"
+                        >
+                          تنظیمات ویترین
+                        </p>
+                      </span>
+                    </RouterLink>
+                  </li>
+                </ul>
+              </div>
+            </collapse-transition>
           </li>
         </ul>
       </div>
