@@ -4,11 +4,15 @@
       v-if="activeModal == 'nameFamilyModal'"
       class="fixed top-0 left-0 z-50 flex w-full h-full transition-opacity duration-300 font-fa overflow-hidden"
     >
-      <div class="absolute inset-0 transition-opacity duration-300 bg-black/20"></div>
+      <div
+        @click="close_modal()"
+        class="absolute inset-0 transition-opacity duration-300 bg-black/20"
+      ></div>
       <div
         class="relative rounded-lg shadow-lg shadow-gray-300/40 h-auto max-w-xl bg-white m-auto inset-0 w-full"
       >
         <button
+          @click="close_modal()"
           type="button"
           class="z-[1] absolute w-8 h-8 text-gray-400 -top-4 -right-4 transform translate-x-3 -translate-y-1 transition-transform hover:bg-gray-100 hover:duration-300 bg-white rounded-md shadow-md flex items-center justify-center"
           data-bs-dismiss="modal"
@@ -46,7 +50,7 @@
                     type="text"
                     class="block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm py-4"
                     placeholder="نام"
-                    value="محبوب "
+                    v-model="fullname.firstname"
                   />
                 </div>
               </div>
@@ -70,18 +74,33 @@
                     type="text"
                     class="block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm py-4"
                     placeholder="نام خانوادگی"
-                    value="حسین زاده"
+                    v-model="fullname.lastname"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <button
-            class="relative btn hover:text-bg-500/80 transition-colors duration-500 bg-gray-300 px-6 py-3 text-white w-full mt-8 flex items-center rounded-lg justify-center"
+          <Button
+            :class="['bg-gray-300 mt-2']"
+            :isShow="fullname.firstname == '' || fullname.lastname == '' ? false : true"
           >
             <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
-          </button>
+          </Button>
+          <Button
+            @click="fullname_seller_change()"
+            :class="['bg-cyan-500 mt-2 shadow-md shadow-cyan-200']"
+            :isShow="
+              fullname.firstname != '' &&
+              fullname.lastname != '' &&
+              loadingButton == false
+                ? false
+                : true
+            "
+          >
+            <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
+          </Button>
+          <LoadingButton :class="['mt-2']" :isShow="loadingButton" />
         </div>
       </div>
     </div>
@@ -89,5 +108,53 @@
 </template>
 
 <script setup>
-const props = defineProps(["activeModal"]);
+import { useToast } from "vue-toastification";
+import Button from "@/components/Buttons/Button.vue";
+import LoadingButton from "@/components/Buttons/LoadingButton.vue";
+import { useSellersStore } from "~/store/sellersStore";
+import { storeToRefs } from "pinia";
+const sellerStore = useSellersStore();
+const { authSeller } = storeToRefs(sellerStore);
+
+const toast = useToast();
+const props = defineProps(["activeModal", "authSeller"]);
+const emit = defineEmits(["close"]);
+const fullname = reactive({
+  firstname:
+    props.authSeller != null && props.authSeller.infoes.firstname != null
+      ? props.authSeller.infoes.firstname
+      : "",
+  lastname:
+    props.authSeller != null && props.authSeller.infoes.lastname != null
+      ? props.authSeller.infoes.lastname
+      : "",
+});
+const loadingButton = ref(false);
+
+const close_modal = () => {
+  emit("close");
+};
+
+const fullname_seller_change = async () => {
+  if (fullname.firstname != "" && fullname.lastname != "") {
+    loadingButton.value = true;
+    const result = await sellerStore.change_seller_fullname(fullname);
+    if (result.status == 200) {
+      loadingButton.value = false;
+      toast.success(result.message);
+      authSeller.value.infoes.firstname = fullname.firstname;
+      authSeller.value.infoes.lastname = fullname.lastname;
+      emit("close");
+    } else if (result.status == 401) {
+      loadingButton.value = false;
+      toast.error(result.message);
+      window.location.href = "/account/signin";
+    } else {
+      loadingButton.value = false;
+      toast.error(result.message);
+    }
+  } else {
+    toast.error("لطفا هر دو فیلد را تکمیل کنید");
+  }
+};
 </script>

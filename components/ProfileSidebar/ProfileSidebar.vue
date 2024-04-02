@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full inset-0 z-[100]">
+  <div class="relative w-full h-full inset-0 z-[100]" v-if="authSeller != null">
     <!-- bg open -->
     <span
       class="fixed bg-gray-900 backdrop-blur-[2px] bg-opacity-30 w-full h-full inset-x-0 top-0 block lg:hidden"
@@ -23,11 +23,16 @@
             class="py-5 px-2 flex-shrink max-w-full w-full flex justify-start text-right"
           >
             <div class="font-semibold flex flex-col">
-              <a
-                href="#"
+              <NuxtLink
+                to="/profile"
                 class="text-gray-800 dark:text-gray-300 hover:text-cyan-500 flex items-center"
-                ><span>محبوب حسین زاده</span
-                ><i class="fa-solid fa-badge-check text-cyan-500 pr-1"></i></a
+                ><span v-if="authSeller.infoes.firstname == null">{{
+                  authSeller.infoes.store_name
+                }}</span
+                ><span v-else>{{
+                  `${authSeller.infoes.firstname} ${authSeller.infoes.lastname}`
+                }}</span
+                ><i class="fa-solid fa-badge-check text-cyan-500 pr-1"></i></NuxtLink
               ><span class="text-sm font-light text-gray-600">فروشنده</span>
             </div>
           </div>
@@ -158,7 +163,7 @@
 </template>
 
 <script setup>
-const props = defineProps(["NavMenu"]);
+const props = defineProps(["NavMenu", "authSeller"]);
 const emit = defineEmits(["close_navmenu_action"]);
 
 const close_navmenu_action = () => {

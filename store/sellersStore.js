@@ -5,6 +5,7 @@ const cookies = process.client == true ? useCookies().cookies : null;
 
 const state = () => ({
     loading: true,
+    authSeller: null
 })
 
 const actions = {
@@ -21,6 +22,7 @@ const actions = {
             const result = await api.get("/sellers/me" , config)
             if(result.status == 200){
                 if(result.data){
+                    this.authSeller = result.data
                     return result.data
                 }else{
                     return false
@@ -182,7 +184,82 @@ const actions = {
         }else{
             return false
         }
-    }
+    },
+    async change_seller_fullname(data){
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/profile/owner-information/change-fullname" , data , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
+    async do_change_seller_mobile(data){
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/profile/owner-information/change-mobile" , data , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
+    async do_seller_verify_mobile(data){
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/profile/owner-information/verify-mobile" , data , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
 }
 
 const getters = {

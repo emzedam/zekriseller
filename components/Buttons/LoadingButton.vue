@@ -1,6 +1,7 @@
 <template>
   <button
     v-if="isShow == true"
+    :class="class"
     class="btn flex items-center justify-center border-transparent bg-cyan-500 darker:bg-gray-700 darker:text-gray-400 w-full py-2.5 text-white w-100 waves-effect waves-light shadow-md shadow-cyan-200 darker:shadow-zinc-600/10 rounded-lg"
     type="button"
   >
@@ -9,7 +10,7 @@
 </template>
 
 <script setup>
-const props = defineProps(["isShow"]);
+const props = defineProps(["isShow", "class"]);
 </script>
 
 <style>

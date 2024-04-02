@@ -5,7 +5,11 @@
       :class="NavMenu == true ? 'lg:mr-72 mr-0' : 'lg:mr-0 mr-0'"
       class="flex flex-col min-h-screen transition-all duration-500 ease-in-out"
     >
-      <Header :NavMenu="NavMenu" @open_navmenu_action="open_nav_menu()" />
+      <Header
+        :authSeller="authSeller"
+        :NavMenu="NavMenu"
+        @open_navmenu_action="open_nav_menu()"
+      />
 
       <slot />
 
@@ -17,6 +21,11 @@
 import MenuRight from "@/components/MenuRight/menu.vue";
 import Header from "@/components/Header/header.vue";
 import Footer from "@/components/Footer/footer.vue";
+import { useSellersStore } from "~/store/sellersStore";
+import { storeToRefs } from "pinia";
+
+const sellersStore = useSellersStore();
+const { authSeller } = storeToRefs(sellersStore);
 
 const NavMenu = ref(false);
 

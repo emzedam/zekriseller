@@ -13,19 +13,41 @@
       </h2>
       <div class="flex flex-col lg:grid lg:grid-cols-2">
         <div
+          v-if="authSeller != null"
           class="flex justify-between items-center py-3 lg:py-4 px-4 border-l border-b"
         >
           <div>
             <div class="flex items-center">
               <p class="text-body-1 text-gray-500 ml-1">نام و نام خانوادگی</p>
             </div>
-            <p class="font-medium text-gray-700">محبوب حسین زاده</p>
+            <p
+              class="font-medium text-gray-700"
+              v-if="authSeller.infoes.firstname != null"
+            >
+              {{ `${authSeller.infoes.firstname} ${authSeller.infoes.lastname}` }}
+            </p>
+            <span class="font-medium text-sm text-gray-700" v-else>نا مشخص</span>
           </div>
           <div class="cursor-pointer">
-            <span class="hidden lg:inline-block" @click="open_modal('nameFamilyModal')">
+            <span
+              v-if="authSeller.infoes.firstname != null"
+              class="hidden lg:inline-block"
+              @click="open_modal('nameFamilyModal')"
+            >
               <div class="flex">
                 <i
                   class="fa-light fa-pen-to-square hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
+                ></i>
+              </div>
+            </span>
+            <span
+              v-else
+              class="hidden lg:inline-block"
+              @click="open_modal('nameFamilyModal')"
+            >
+              <div class="flex">
+                <i
+                  class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
                 ></i>
               </div>
             </span>
@@ -68,11 +90,20 @@
           <div>
             <div class="flex items-center">
               <p class="text-body-1 text-gray-500 ml-1">شماره موبایل</p>
-              <div class="rounded-lg px-2 text-caption-strong text-white bg-green-500">
+              <div
+                v-if="authSeller != null && authSeller.mobile != null"
+                class="rounded-lg px-2 text-caption-strong text-white bg-green-500"
+              >
                 تاییدشده
               </div>
             </div>
-            <p class="font-medium text-gray-700">۰۹۰۳۰۲۶۴۳۰۰</p>
+            <p class="font-medium text-gray-700">
+              {{
+                authSeller != null && authSeller.mobile != null
+                  ? authSeller.mobile
+                  : "نا مشخص"
+              }}
+            </p>
           </div>
           <div class="cursor-pointer">
             <span class="hidden lg:inline-block" @click="open_modal('mobileNumberModal')">
@@ -169,14 +200,18 @@
       </div>
     </div>
 
-    <NameFamilyModal :activeModal="activeModal" />
-    <EmailModal :activeModal="activeModal" />
-    <CodeMelliModal :activeModal="activeModal" />
-    <MobileNumberModal :activeModal="activeModal" />
-    <NotifMobileNumber :activeModal="activeModal" />
-    <PasswordModal :activeModal="activeModal" />
+    <NameFamilyModal
+      :authSeller="authSeller"
+      :activeModal="activeModal"
+      @close="activeModal = null"
+    />
+    <EmailModal :activeModal="activeModal" @close="activeModal = null" />
+    <CodeMelliModal :activeModal="activeModal" @close="activeModal = null" />
+    <MobileNumberModal :activeModal="activeModal" @close="activeModal = null" />
+    <NotifMobileNumber :activeModal="activeModal" @close="activeModal = null" />
+    <PasswordModal :activeModal="activeModal" @close="activeModal = null" />
   </div>
-  <!-- ==============اطلاعات مالک کسب‌وکار======================= -->
+  <!-- ============== اطلاعات مالک کسب‌وکار ======================= -->
 </template>
 <script setup>
 import NameFamilyModal from "@/components/Modals/Profile/BusinessOwnerInformation/Name-Family-Modal.vue";
@@ -185,6 +220,11 @@ import CodeMelliModal from "@/components/Modals/Profile/BusinessOwnerInformation
 import MobileNumberModal from "@/components/Modals/Profile/BusinessOwnerInformation/Mobile-Number-Modal.vue";
 import NotifMobileNumber from "@/components/Modals/Profile/BusinessOwnerInformation/Notification-Mobile-Number.vue";
 import PasswordModal from "@/components/Modals/Profile/BusinessOwnerInformation/PasswordModal.vue";
+import { useSellersStore } from "~/store/sellersStore";
+import { storeToRefs } from "pinia";
+
+const sellersStore = useSellersStore();
+const { authSeller } = storeToRefs(sellersStore);
 
 const activeModal = ref(null);
 const open_modal = (modalName) => {

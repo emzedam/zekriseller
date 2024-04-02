@@ -1,11 +1,19 @@
 <template>
   <div class="wrapper overflow-x-hidden bg-white">
-    <ProfileSidebar @close_navmenu_action="NavMenu = false" :NavMenu="NavMenu" />
+    <ProfileSidebar
+      :authSeller="authSeller != null ? authSeller : null"
+      @close_navmenu_action="NavMenu = false"
+      :NavMenu="NavMenu"
+    />
     <div
       :class="NavMenu == false ? 'lg:mr-0 mr-0' : 'lg:mr-72 mr-0'"
       class="flex flex-col min-h-screen transition-all duration-500 ease-in-out"
     >
-      <Header :NavMenu="NavMenu" @open_navmenu_action="open_nav_menu()" />
+      <Header
+        :authSeller="authSeller"
+        :NavMenu="NavMenu"
+        @open_navmenu_action="open_nav_menu()"
+      />
       <slot />
       <Footer />
     </div>
@@ -16,6 +24,11 @@
 import ProfileSidebar from "@/components/ProfileSidebar/ProfileSidebar.vue";
 import Header from "@/components/Header/header.vue";
 import Footer from "@/components/Footer/footer.vue";
+import { useSellersStore } from "~/store/sellersStore";
+import { storeToRefs } from "pinia";
+
+const sellersStore = useSellersStore();
+const { authSeller } = storeToRefs(sellersStore);
 
 const NavMenu = ref(false);
 

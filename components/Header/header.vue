@@ -228,15 +228,28 @@
           >
             <li class="relative">
               <div class="py-5 px-6 flex-shrink max-w-full w-full flex justify-between">
-                <div class="font-semibold flex flex-col">
-                  <a href="#" class="text-gray-800 dark:text-gray-300 hover:text-cyan-500"
-                    >محبوب حسین زاده</a
+                <div class="font-semibold flex flex-col" v-if="authSeller != null">
+                  <a
+                    v-if="authSeller.infoes.firstname == null"
+                    href="javascript:void(0)"
+                    class="text-gray-800 dark:text-gray-300 hover:text-cyan-500"
+                    >{{ authSeller.infoes.store_name }}</a
+                  >
+                  <a
+                    v-else
+                    href="javascript:void(0)"
+                    class="text-gray-800 dark:text-gray-300 hover:text-cyan-500"
+                    >{{
+                      `${authSeller.infoes.firstname} ${authSeller.infoes.lastname}`
+                    }}</a
                   >
 
                   <span class="text-sm font-light text-gray-600">فروشنده</span>
                 </div>
-                <a href="" class="text-gray text-sm mt-1 text-cyan-500 font-semibold"
-                  >مشاهده پروفایل</a
+                <nuxt-link
+                  to="/profile"
+                  class="text-gray text-sm mt-1 text-cyan-500 font-semibold"
+                  >مشاهده پروفایل</nuxt-link
                 >
               </div>
             </li>
@@ -303,8 +316,7 @@
 </template>
 
 <script setup>
-import CollapseTransition from "@/plugins/CollapseTransition.vue";
-const props = defineProps(["NavMenu"]);
+const props = defineProps(["NavMenu", "authSeller"]);
 const profile = ref(false);
 const Notification = ref(false);
 const submenuIndex = ref(false);

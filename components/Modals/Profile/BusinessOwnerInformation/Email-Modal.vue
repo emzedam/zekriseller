@@ -5,11 +5,15 @@
       v-if="activeModal == 'emailModal'"
       class="fixed top-0 left-0 z-50 flex w-full h-full transition-opacity duration-300 font-fa overflow-hidden"
     >
-      <div class="absolute inset-0 transition-opacity duration-300 bg-black/20"></div>
       <div
-        class="relative rounded-lg shadow-lg shadow-gray-300/40 modal-container h-auto max-w-2xl bg-white m-auto inset-0 w-full"
+        @click="close_modal()"
+        class="absolute inset-0 transition-opacity duration-300 bg-black/20"
+      ></div>
+      <div
+        class="relative rounded-lg shadow-lg shadow-gray-300/40 h-auto max-w-xl bg-white m-auto inset-0 w-full"
       >
         <button
+          @click="close_modal()"
           type="button"
           class="z-[1] absolute w-8 h-8 text-gray-400 -top-4 -right-4 transform translate-x-3 -translate-y-1 transition-transform hover:bg-gray-100 hover:duration-300 bg-white rounded-md shadow-md flex items-center justify-center"
           data-bs-dismiss="modal"
@@ -66,4 +70,10 @@
 
 <script setup>
 const props = defineProps(["activeModal"]);
+
+const emit = defineEmits(["close"]);
+
+const close_modal = () => {
+  emit("close");
+};
 </script>

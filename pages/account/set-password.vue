@@ -57,7 +57,9 @@
                     </div>
                   </div>
                   <div class="mb-3">
-                    <Button @click="" :isShow="loadingFormState">تایید رمز</Button>
+                    <Button :class="['bg-cyan-500']" @click="" :isShow="loadingFormState"
+                      >تایید رمز</Button
+                    >
                     <LoadingButton :isShow="loadingFormState" />
                   </div>
 

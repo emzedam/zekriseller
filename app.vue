@@ -1,24 +1,14 @@
 <template>
-  <div class="w-full h-full">
-    <div class="spin-container" :class="loading == true ? 'show' : 'hide'">
-      <img src="@/assets/images/logo.png" width="200" />
-    </div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
-<script setup>
-import { useSellersStore } from "~/store/sellersStore";
-import { storeToRefs } from "pinia";
-
-const { loading } = storeToRefs(useSellersStore());
-</script>
+<script setup></script>
 
 <style>
 .Vue-Toastification__toast {
-  max-width: 399px !important;
+  max-width: 499px !important;
   direction: rtl !important;
   font-family: "yekan-bakh-new" !important;
 }
