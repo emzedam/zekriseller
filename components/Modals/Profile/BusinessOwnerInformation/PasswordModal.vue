@@ -184,11 +184,21 @@
               </div>
             </div>
 
-            <button
-              class="relative col-span-1 sm:col-span-2 btn hover:text-bg-500/80 transition-colors duration-500 bg-gray-300 px-6 py-3 text-white w-full mt-4 flex items-center border rounded-lg justify-center"
+            <Button
+              :class="['bg-gray-300 mt-8']"
+              :isShow="password_validator_results.length != 0 ||
+              passwordData.repeatPassword != passwordData.newPassword ? false : true"
             >
               <i class="fa-solid fa-edit pl-2 text-xl"></i> تغییر رمز عبور
-            </button>
+            </Button>
+            <Button
+              @click="change_seller_mobile()"
+              :class="['bg-cyan-500 mt-8 shadow-md shadow-cyan-200']"
+              :isShow="password_validator_results.length == 0 &&
+              passwordData.repeatPassword == passwordData.newPassword && sendRequestLoading == false ? false : true"
+            >
+              <i class="fa-solid fa-edit pl-2 text-xl"></i> تغییر رمز عبور
+            </Button>
           </div>
         </div>
       </div>
@@ -198,6 +208,8 @@
 </template>
 
 <script setup>
+import Button from "@/components/Buttons/Button.vue";
+import LoadingButton from "@/components/Buttons/LoadingButton.vue";
 import passwordValidator from "password-validator";
 import { useSellersStore } from "~/store/sellersStore";
 import { useToast } from "vue-toastification";
