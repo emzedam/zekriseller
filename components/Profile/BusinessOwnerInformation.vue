@@ -193,25 +193,33 @@
             </span>
           </div>
         </div>
-        <div class="flex justify-between items-center py-3 lg:py-4 px-4">
+        <div class="flex justify-between items-center py-3 lg:py-4 px-4" v-if="authSeller != null">
           <div>
             <div class="flex items-center">
               <p class="text-body-1 text-gray-500 ml-1">شماره موبایل اطلاع‌رسانی</p>
-              <div class="rounded-lg px-2 text-caption-strong text-white bg-green-500">
+              <div :class="authSeller.infoes.declaration_mobile != null ? '' : 'hidden'" class="rounded-lg px-2 text-caption-strong text-white bg-green-500">
                 تاییدشده
               </div>
             </div>
-            <p class="font-medium text-gray-700">۹۸۹۰۳۰۲۶۴۳۰۰</p>
+            <p class="font-medium text-gray-700 font-en" v-if="authSeller.infoes.declaration_mobile != null">{{ authSeller.infoes.declaration_mobile }}</p>
+            <p class="font-medium text-gray-700" v-else>نا مشخص</p>
           </div>
           <div class="cursor-pointer">
-            <span class="hidden lg:inline-block" @click="open_modal('notifMobileModal')">
+            <span v-if="authSeller.infoes.declaration_mobile != null" class="hidden lg:inline-block" @click="open_modal('notifMobileModal')">
               <div class="flex">
                 <i
                   class="fa-light fa-pen-to-square hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
                 ></i>
               </div>
             </span>
-            <span class="inline-block lg:hidden">
+            <span v-else class="hidden lg:inline-block" @click="open_modal('notifMobileModal')">
+              <div class="flex">
+                <i
+                  class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
+                ></i>
+              </div>
+            </span>
+            <span class="inline-block lg:hidden" @click="open_modal('notifMobileModal')">
               <div class="flex text-gray-400">
                 <i
                   class="fa-light fa-chevron-left text-lg hover:text-cyan-500 transition-all duration-300"

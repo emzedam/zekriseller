@@ -28,7 +28,7 @@
         </div>
         <div class="modal-body font-fa mx-2 px-6 my-4">
           <p class="py-2 font-medium text-gray-700">
-            کد ۵ رقمی به شماره‌ی {{ mobileData.mobile }} ارسال گردید
+            کد 4 رقمی به شماره‌ی {{ mobileData.mobile }} ارسال گردید
           </p>
           <div class="gap-6">
             <div class="relative col-span-12 sm:col-span-12 w-full pt-8 pb-6">

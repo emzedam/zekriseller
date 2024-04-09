@@ -399,7 +399,7 @@ const map_init = () => {
     });
 
     marker.setDraggable(false);
-  }, 500);
+  }, 1000);
 };
 
 const keyUpSearchText = async (e) => {
