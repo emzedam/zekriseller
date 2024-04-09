@@ -44,7 +44,7 @@
                     ></i>
                   </div>
                   <input
-                    type="password"
+                    :type="pEyeState == true ? 'text' : 'password'"
                     v-model="passwordData.password"
                     class="items-center block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm"
                     placeholder="رمز عبور"
@@ -54,7 +54,9 @@
                   >
                     <div position="top" tooltip="نمایش" paid="نمایش" balance="نمایش">
                       <i
-                        class="fa-duotone fa-eye text-cyan-500 h-1 pt-1 w-5 flex leading-[1px] pl-1"
+                        @click="pEyeState = !pEyeState"
+                        :class="pEyeState == true ? 'fa-eye-slash' : 'fa-eye'"
+                        class="fa-duotone text-cyan-500 h-1 pt-1 w-5 flex leading-[1px] pl-1"
                       ></i
                       ><!-- هنگام مخفی کردن پسورد ایکون زیر نمایش داده شود به صورت Toggle
                               <i
@@ -91,7 +93,7 @@
                     ></i>
                   </div>
                   <input
-                    type="password"
+                    :type="npEyeState == true ? 'text' : 'password'"
                     :value="passwordData.newPassword"
                     @input="(e) => set_new_password_value(e)"
                     class="items-center block w-full focus:border-cyan-500 focus:ring-cyan-500 pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm"
@@ -102,7 +104,9 @@
                   >
                     <div position="top" tooltip="نمایش" paid="نمایش" balance="نمایش">
                       <i
-                        class="fa-duotone fa-eye text-cyan-500 h-1 pt-1 w-5 flex leading-[1px] pl-1"
+                        @click="npEyeState = !npEyeState"
+                        :class="npEyeState == true ? 'fa-eye-slash' : 'fa-eye'"
+                        class="fa-duotone text-cyan-500 h-1 pt-1 w-5 flex leading-[1px] pl-1"
                       ></i
                       ><!-- هنگام مخفی کردن پسورد ایکون زیر نمایش داده شود به صورت Toggle
                               <i
@@ -144,7 +148,7 @@
                     ></i>
                   </div>
                   <input
-                    type="password"
+                    :type="rpEyeState == true ? 'text' : 'password'"
                     :class="{
                       'focus:border-cyan-500 focus:ring-cyan-500':
                         passwordData.repeatPassword == passwordData.newPassword &&
@@ -171,7 +175,9 @@
                   >
                     <div position="top" tooltip="نمایش" paid="نمایش" balance="نمایش">
                       <i
-                        class="fa-duotone fa-eye text-cyan-500 h-1 pt-1 w-5 flex leading-[1px] pl-1"
+                        @click="rpEyeState = !rpEyeState"
+                        :class="rpEyeState == true ? 'fa-eye-slash' : 'fa-eye'"
+                        class="fa-duotone text-cyan-500 h-1 pt-1 w-5 flex leading-[1px] pl-1"
                       ></i
                       ><!-- هنگام مخفی کردن پسورد ایکون زیر نمایش داده شود به صورت Toggle
                               <i
@@ -192,13 +198,14 @@
               <i class="fa-solid fa-edit pl-2 text-xl"></i> تغییر رمز عبور
             </Button>
             <Button
-              @click="change_seller_mobile()"
+              @click="change_password()"
               :class="['bg-cyan-500 mt-8 shadow-md shadow-cyan-200']"
               :isShow="password_validator_results.length == 0 &&
               passwordData.repeatPassword == passwordData.newPassword && sendRequestLoading == false ? false : true"
             >
               <i class="fa-solid fa-edit pl-2 text-xl"></i> تغییر رمز عبور
             </Button>
+            <LoadingButton :class="['mt-8']" :isShow="sendRequestLoading" />
           </div>
         </div>
       </div>
@@ -226,6 +233,11 @@ const passwordData = reactive({
   newPassword: "",
   repeatPassword: "",
 });
+
+const rpEyeState = ref(false)
+const npEyeState = ref(false)
+const pEyeState = ref(false)
+
 passwordValidatorSchema
   .is()
   .min(8, "رمز عبور شما باید حداقل ۸ حرف باشد.") // Minimum length 8
@@ -260,7 +272,7 @@ set_new_password_value();
 const change_password = async () => {
   if (is_validate_password()) {
     sendRequestLoading.value = true;
-    const result = await sellerStore.do_change_user_password(passwordData);
+    const result = await sellerStore.change_profile_seller_password(passwordData);
     if (result.statusCode == 200) {
       sendRequestLoading.value = false;
       toast.success(result.message);
@@ -268,8 +280,7 @@ const change_password = async () => {
       passwordData.password = "";
       passwordData.newPassword = "";
       passwordData.repeatPassword = "";
-
-      reset_modals();
+      emit("close");
     } else {
       sendRequestLoading.value = false;
       toast.error(result.message);

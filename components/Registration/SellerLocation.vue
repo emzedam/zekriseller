@@ -69,7 +69,7 @@
             <transition-group name="slide">
               <div style="font-family: 'yekan-bakh-new'" key="123">
                 <div
-                  :class="showMapForm == false ? 'right-[-900px]' : 'right-0'"
+                  :class="showMapForm == false ? 'right-[-1900px] ' : 'right-0'"
                   class="bg-white w-full lg:w-2/4 h-screen absolute transition-all top-0 z-10 rounded-r-lg p-6"
                 >
                   <div class="relative w-100 p-3">

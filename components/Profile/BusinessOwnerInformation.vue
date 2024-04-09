@@ -51,7 +51,7 @@
                 ></i>
               </div>
             </span>
-            <span class="inline-block lg:hidden">
+            <span class="inline-block lg:hidden" @click="open_modal('codemelliModal')">
               <div class="flex text-gray-400">
                 <i
                   class="fa-light fa-chevron-left text-lg hover:text-cyan-500 transition-all duration-300"
@@ -60,22 +60,30 @@
             </span>
           </div>
         </div>
-        <div class="flex justify-between items-center py-3 lg:py-4 px-4 border-b">
+        <div class="flex justify-between items-center py-3 lg:py-4 px-4 border-b" v-if="authSeller != null">
           <div>
             <div class="flex items-center">
               <p class="text-body-1 text-gray-500 ml-1">کد ملی</p>
             </div>
-            <p class="font-medium text-gray-700">۲۷۹۰۱۱۳۸۹۰</p>
+            <p class="font-medium text-gray-700" v-if="authSeller.infoes.codemelli != null">{{ authSeller.infoes.codemelli }}</p>
+            <p class="font-medium text-gray-700" v-else>نا مشخص</p>
           </div>
           <div class="cursor-pointer">
-            <span class="hidden lg:inline-block" @click="open_modal('codemelliModal')">
+            <span  v-if="authSeller.infoes.codemelli != null" class="hidden lg:inline-block" @click="open_modal('codemelliModal')">
               <div class="flex">
                 <i
                   class="fa-light fa-pen-to-square hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
                 ></i>
               </div>
             </span>
-            <span class="inline-block lg:hidden">
+            <span  v-else class="hidden lg:inline-block" @click="open_modal('codemelliModal')">
+              <div class="flex">
+                <i
+                  class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
+                ></i>
+              </div>
+            </span>
+            <span class="inline-block lg:hidden" @click="open_modal('codemelliModal')">
               <div class="flex text-gray-400">
                 <i
                   class="fa-light fa-chevron-left text-lg hover:text-cyan-500 transition-all duration-300"
@@ -106,14 +114,21 @@
             </p>
           </div>
           <div class="cursor-pointer">
-            <span class="hidden lg:inline-block" @click="open_modal('mobileNumberModal')">
+            <span class="hidden lg:inline-block" v-if="authSeller.mobile != null" @click="open_modal('mobileNumberModal')">
               <div class="flex">
                 <i
                   class="fa-light fa-pen-to-square hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
                 ></i>
               </div>
             </span>
-            <span class="inline-block lg:hidden">
+            <span class="hidden lg:inline-block" v-else @click="open_modal('mobileNumberModal')">
+              <div class="flex">
+                <i
+                  class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
+                ></i>
+              </div>
+            </span>
+            <span class="inline-block lg:hidden" @click="open_modal('mobileNumberModal')">
               <div class="flex text-gray-400">
                 <i
                   class="fa-light fa-chevron-left text-lg hover:text-cyan-500 transition-all duration-300"
@@ -122,22 +137,30 @@
             </span>
           </div>
         </div>
-        <div class="flex justify-between items-center py-3 lg:py-4 px-4 border-b">
+        <div class="flex justify-between items-center py-3 lg:py-4 px-4 border-b" v-if="authSeller != null">
           <div>
             <div class="flex items-center">
               <p class="text-body-1 text-gray-500 ml-1">ایمیل</p>
             </div>
-            <p class="font-medium text-gray-700 font-en">babaweb@outlook.com</p>
+            <p class="font-medium text-gray-700 font-en" v-if="authSeller.infoes.email != null">{{ authSeller.infoes.email }}</p>
+            <p class="font-medium text-gray-700" v-else>نا مشخص</p>
           </div>
           <div class="cursor-pointer">
-            <span class="hidden lg:inline-block" @click="open_modal('emailModal')">
+            <span class="hidden lg:inline-block" v-if="authSeller.infoes.email != null" @click="open_modal('emailModal')">
               <div class="flex">
                 <i
                   class="fa-light fa-pen-to-square hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
                 ></i>
               </div>
             </span>
-            <span class="inline-block lg:hidden">
+            <span class="hidden lg:inline-block" v-else @click="open_modal('emailModal')">
+              <div class="flex">
+                <i
+                  class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"
+                ></i>
+              </div>
+            </span>
+            <span class="inline-block lg:hidden" @click="open_modal('emailModal')">
               <div class="flex text-gray-400">
                 <i
                   class="fa-light fa-chevron-left text-lg hover:text-cyan-500 transition-all duration-300"

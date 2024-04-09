@@ -51,17 +51,32 @@
                     type="text"
                     class="block w-full pr-10 border-gray-300 rounded-md focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm py-4"
                     placeholder="کد ملی "
-                    value="2790113890"
+                    v-model="codemelliData.codemelli"
+                    @keyup.enter="edit_seller_codemelli()"
                   />
                 </div>
               </div>
             </div>
 
-            <button
-              class="relative btn hover:text-bg-500/80 transition-colors duration-500 bg-gray-300 px-6 py-3 text-white w-full mt-4 flex items-center justify-center border rounded-lg"
+            <Button
+            :class="['bg-gray-300 mt-2']"
+            :isShow="codemelliData.codemelli == '' ? false : true"
             >
               <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
-            </button>
+            </Button>
+            <Button
+              @click="edit_seller_codemelli()"
+              :class="['bg-cyan-500 mt-2 shadow-md shadow-cyan-200']"
+              :isShow="
+                codemelliData.codemelli != '' &&
+                sendRequestLoading == false
+                  ? false
+                  : true
+              "
+            >
+              <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
+            </Button>
+            <LoadingButton :class="['mt-2']" :isShow="sendRequestLoading" />
           </div>
         </div>
       </div>
@@ -71,8 +86,46 @@
 </template>
 
 <script setup>
+import { useToast } from "vue-toastification";
+import Button from "@/components/Buttons/Button.vue";
+import LoadingButton from "@/components/Buttons/LoadingButton.vue";
+import { storeToRefs } from "pinia";
+import { useSellersStore } from "~/store/sellersStore";
+
+const sellerStore = useSellersStore();
+const { authSeller } = storeToRefs(sellerStore);
 const props = defineProps(["activeModal"]);
 const emit = defineEmits(["close"]);
+const toast = useToast();
+
+const sendRequestLoading = ref(false);
+const codemelliData = reactive({
+  codemelli: authSeller.value != null && authSeller.value.infoes.codemelli != null ? authSeller.value.infoes.codemelli : "",
+});
+
+const edit_seller_codemelli = async () => {
+  if (codemelliData.codemelli != "") {
+    if (codemelliData.codemelli.toString().length != 10) {
+      toast.error("کد ملی وارد شده نامعتبر است");
+      return false;
+    }
+    sendRequestLoading.value = true;
+    const result = await sellerStore.change_seller_national_code(codemelliData);
+    if (result.statusCode == 200) {
+      sendRequestLoading.value = false;
+      toast.success(result.message);
+
+      authSeller.value.infoes.codemelli = result.result;
+      emit("close");
+    } else {
+      sendRequestLoading.value = false;
+      toast.error(result.message);
+    }
+  } else {
+    sendRequestLoading.value = false;
+    toast.error("لطفا کد ملی  خود را وارد کنید");
+  }
+};
 
 const close_modal = () => {
   emit("close");
