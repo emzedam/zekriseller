@@ -238,11 +238,20 @@ const actions = {
     async do_seller_verify_mobile(data){
         let token = cookies.get("seller-token") || "";
         if(token != ""){
-            const result = await api.post("/sellers/profile/owner-information/verify-mobile" , data , {
-                headers: {
-                    Authorization:`Bearer ${token}`
-                }
-            })
+            let result;
+            if(data.state == 'core_mobile'){
+                result = await api.post("/sellers/profile/owner-information/verify-mobile" , data , {
+                    headers: {
+                        Authorization:`Bearer ${token}`
+                    }
+                })
+            }else{
+                result = await api.post("/sellers/profile/owner-information/verify-declare-mobile" , data , {
+                    headers: {
+                        Authorization:`Bearer ${token}`
+                    }
+                })
+            }
             if(result.status == 200){
                 if(result.data){
                     return result.data

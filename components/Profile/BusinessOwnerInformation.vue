@@ -93,6 +93,7 @@
           </div>
         </div>
         <div
+          v-if="authSeller != null"
           class="flex justify-between items-center py-3 lg:py-4 px-4 border-l border-b"
         >
           <div>

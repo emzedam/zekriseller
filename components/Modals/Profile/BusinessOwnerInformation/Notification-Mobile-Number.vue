@@ -267,6 +267,7 @@ const do_verify_mobile = async () => {
           ? mobileData.mobile
           : "0" + mobileData.mobile,
       otp: mobileData.otp,
+      state: "declare_mobile"
     });
     if (result.status == 200) {
       requestLoading.value = false;
@@ -275,7 +276,7 @@ const do_verify_mobile = async () => {
       // close verify mobile modal
       openVerifyModal.value = false;
 
-      authSeller.value.mobile = mobileData.mobile;
+      authSeller.value.infoes.declaration_mobile = mobileData.mobile;
     } else {
       requestLoading.value = false;
       toast.error(result.message);

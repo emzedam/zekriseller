@@ -40,58 +40,15 @@
 
         <!-- ===============منو سمت راست داشبورد کاربر======================== -->
         <ul class="flex-col flex space-y-4">
-          <NuxtLink to="/profile/business-owner-nformation" class="text-cyan-500">
+          <NuxtLink to="/profile" :class="$route.path == '/profile' ? 'text-cyan-500' : ''">
             <li
-              class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex"
+              class="p-3 hover:bg-gray-50 transition-all duration-300 relative cursor-pointer font-medium items-center justify-between flex"
             >
               <div class="flex items-center">
                 <span><i class="fa-light fa-user pl-2 text-xl"></i></span
                 ><span>اطلاعات مالک کسب‌وکار</span>
-              </div>
-              <i
-                class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
-              ></i>
-            </li>
-          </NuxtLink>
-
-          <NuxtLink to="/profile/store-information/">
-            <li
-              class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex text-right"
-            >
-              <div class="title">
-                <span><i class="fa-light fa-store pl-2 text-xl"></i></span
-                ><span> اطلاعات فروشگاه</span>
-              </div>
-
-              <i
-                class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
-              ></i>
-            </li>
-          </NuxtLink>
-
-          <NuxtLink to="/profile/addresses/">
-            <li
-              class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex"
-            >
-              <div class="title flex items-center">
-                <span><i class="fa-light fa-map-location-dot pl-2 text-xl"></i></span
-                ><span>آدرس ها</span>
-              </div>
-
-              <i
-                class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
-              ></i>
-            </li>
-          </NuxtLink>
-
-          <NuxtLink to="/profile/financial/">
-            <li
-              class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex relative overflow-hidden"
-            >
-              <div class="flex items-center">
-                <span><i class="fa-light fa-credit-card pl-2 text-xl"></i></span
-                ><span> مالی</span>
                 <div
+                  v-if="$route.path == '/profile'"
                   class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
                 ></div>
               </div>
@@ -101,13 +58,55 @@
             </li>
           </NuxtLink>
 
-          <NuxtLink to="/profile/documents/">
+          <NuxtLink to="/profile/store-information/" :class="$route.path == '/profile/store-information/' ? 'text-cyan-500' : ''">
+            <li
+              class="p-3 hover:bg-gray-50 transition-all duration-300 relative cursor-pointer font-medium items-center justify-between flex text-right"
+            >
+              <div class="title">
+                <span><i class="fa-light fa-store pl-2 text-xl"></i></span
+                ><span> اطلاعات فروشگاه</span>
+                <div
+                  v-if="$route.path == '/profile/store-information/'"
+                  class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
+                ></div>
+              </div>
+
+              <i
+                class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
+              ></i>
+            </li>
+          </NuxtLink>
+
+          <NuxtLink to="/profile/addresses/" :class="$route.path == '/profile/addresses/' ? 'text-cyan-500' : ''">
+            <li
+              class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer relative font-medium items-center justify-between flex"
+            >
+              <div class="title flex items-center">
+                <span><i class="fa-light fa-map-location-dot pl-2 text-xl"></i></span
+                ><span>آدرس ها</span>
+                <div
+                  v-if="$route.path == '/profile/addresses/'"
+                  class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
+                ></div>
+              </div>
+
+              <i
+                class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
+              ></i>
+            </li>
+          </NuxtLink>
+
+          <NuxtLink to="/profile/financial/" :class="$route.path == '/profile/financial/' ? 'text-cyan-500' : ''">
             <li
               class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex relative overflow-hidden"
             >
               <div class="flex items-center">
-                <span><i class="fa-light fa-upload pl-2 text-xl"></i></span
-                ><span> مدارک</span>
+                <span><i class="fa-light fa-credit-card pl-2 text-xl"></i></span
+                ><span> مالی</span>
+                <div
+                  v-if="$route.path == '/profile/financial/'"
+                  class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
+                ></div>
               </div>
               <i
                 class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
@@ -115,13 +114,35 @@
             </li>
           </NuxtLink>
 
-          <NuxtLink to="/profile/contract-status/">
+          <NuxtLink to="/profile/documents/" :class="$route.path == '/profile/documents/' ? 'text-cyan-500' : ''">
             <li
-              class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex"
+              class="p-3 hover:bg-gray-50 transition-all releative duration-300 cursor-pointer font-medium items-center justify-between flex relative overflow-hidden"
+            >
+              <div class="flex items-center">
+                <span><i class="fa-light fa-upload pl-2 text-xl"></i></span
+                ><span> مدارک</span>
+                <div
+                  v-if="$route.path == '/profile/documents/'"
+                  class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
+                ></div>
+              </div>
+              <i
+                class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
+              ></i>
+            </li>
+          </NuxtLink>
+
+          <NuxtLink to="/profile/contract-status/" :class="$route.path == '/profile/contract-status/' ? 'text-cyan-500' : ''">
+            <li
+              class="p-3 hover:bg-gray-50 transition-all releative duration-300 cursor-pointer font-medium items-center justify-between flex"
             >
               <div class="flex items-center">
                 <span><i class="fa-light fa-file pl-2 text-xl"></i></span
                 ><span>قرارداد</span>
+                <div
+                  v-if="$route.path == '/profile/contract-status/'"
+                  class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
+                ></div>
               </div>
               <i
                 class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
@@ -129,13 +150,17 @@
             </li>
           </NuxtLink>
 
-          <NuxtLink to="/profile/tutorials/">
+          <NuxtLink to="/profile/tutorials/" :class="$route.path == '/profile/tutorials/' ? 'text-cyan-500' : ''"> 
             <li
-              class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex"
+              class="p-3 hover:bg-gray-50 transition-all releative duration-300 cursor-pointer font-medium items-center justify-between flex"
             >
               <div class="flex items-center">
                 <span><i class="fa-light fa-video pl-2 text-xl"></i></span
                 ><span>آموزش</span>
+                <div
+                  v-if="$route.path == '/profile/tutorials/'"
+                  class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
+                ></div>
               </div>
 
               <i

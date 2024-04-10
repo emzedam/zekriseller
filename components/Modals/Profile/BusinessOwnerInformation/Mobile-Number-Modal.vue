@@ -240,6 +240,7 @@ const do_verify_mobile = async () => {
           ? mobileData.mobile
           : "0" + mobileData.mobile,
       otp: mobileData.otp,
+      state: "core_mobile"
     });
     if (result.status == 200) {
       requestLoading.value = false;
