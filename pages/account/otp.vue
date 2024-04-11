@@ -54,7 +54,7 @@
                   </div>
 
                   <div class="mb-3">
-                    <Button :class="['bg-cyan-500']" @click="" :isShow="loadingFormState"
+                    <Button type="submit" :class="['bg-cyan-500']" :isShow="loadingFormState"
                       >احراز هویت</Button
                     >
                     <LoadingButton :isShow="loadingFormState" />

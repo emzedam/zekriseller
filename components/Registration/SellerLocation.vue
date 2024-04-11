@@ -442,7 +442,7 @@ const clickedOnAddress = async (address) => {
   searchResult.value = [];
 };
 
-const show_map_form_and_submit = async () => {
+const show_map_form_and_submit = async() => {
   if (buttonStatus.value == true) {
     if (showMapForm.value == false) {
       reverseLoading.value = true;
