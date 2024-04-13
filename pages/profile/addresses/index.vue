@@ -9,6 +9,7 @@
             <YourAddress 
             @add_address_to_list="(data) => add_seller_address_to_list(data)"
             @edit_address_in_list="(data) => edit_seller_address_in_list(data)"
+            @do_remove_address="(index) => splice_seller_address(index)"
             :addressList="addressList" />
           </div>
         </div>
@@ -72,5 +73,9 @@
   const edit_seller_address_in_list = (data) => {
     addressList.value.splice(data.index , 1)
     addressList.value = [data.address , ...addressList.value]
+  }
+
+  const splice_seller_address = (index) => {
+    addressList.value.splice(index , 1)
   }
   </script>

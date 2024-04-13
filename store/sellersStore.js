@@ -418,6 +418,31 @@ const actions = {
         }else{
             return false
         }
+    },
+    async remove_seller_address(address_id) {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/profile/address/delete" , {id: address_id} , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
     }
 }
 

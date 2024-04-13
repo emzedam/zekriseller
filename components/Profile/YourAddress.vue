@@ -35,7 +35,7 @@
                      <i class="fa-light fa-edit pl-2 text-xl"></i> ویرایش
                   </button>
 
-                  <button class="relative btn hover:text-bg-500/80 transition-colors duration-500 bg-white px-6 py-3 hover:bg-red-50 text-red-500 border border-red-500 hover:border w-full flex items-center rounded-lg justify-center">
+                  <button @click="remove_address(index , address._id)" class="relative btn hover:text-bg-500/80 transition-colors duration-500 bg-white px-6 py-3 hover:bg-red-50 text-red-500 border border-red-500 hover:border w-full flex items-center rounded-lg justify-center">
                      <i class="fa-light fa-trash pl-2 text-xl"></i> حذف
                   </button>
                </div>
@@ -53,8 +53,8 @@
 
 
 
-   <!-- mapbox modal -->
-   <transition-group name="modal">
+    <!-- mapbox modal -->
+    <transition-group name="modal">
       <div
          v-if="mapModal == true"
          class="fixed top-0 left-0 z-50 flex w-full h-full transition-opacity duration-300 font-fa overflow-hidden"
@@ -418,7 +418,7 @@ const props = defineProps({
 })
 const toast = useToast();
 const mapCenter = ref([51.38866839337672, 35.69080481760244]);
-const emit = defineEmits(["add_address_to_list" , "edit_address_in_list"]);
+const emit = defineEmits(["add_address_to_list" , "edit_address_in_list" , "do_remove_address"]);
 const searchResult = ref([]);
 const showMapForm = ref(false);
 const sellerToken = useCookie("seller-token");
@@ -678,6 +678,18 @@ const open_edit_map_modal = (address , index) => {
   editableAddressData.address = address
 
   map_init()
+}
+
+const remove_address = async (index , address_id) => {
+  if(confirm("آیا از حذف این آدرس مطمعنید ؟")) {
+    const result = await sellerStore.remove_seller_address(address_id)
+    if(result.status == 200){
+      emit("do_remove_address" , index)
+      toast.success(result.message)
+    }else{
+      toast.error("خطا در حذف آدرس!")
+    }
+  }
 }
 </script> 
 
