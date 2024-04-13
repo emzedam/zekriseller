@@ -8,6 +8,7 @@
             <VerifyNotif />
             <YourAddress 
             @add_address_to_list="(data) => add_seller_address_to_list(data)"
+            @edit_address_in_list="(data) => edit_seller_address_in_list(data)"
             :addressList="addressList" />
           </div>
         </div>
@@ -66,5 +67,10 @@
 
   const add_seller_address_to_list = (data) => {
     addressList.value = [data , ...addressList.value]
+  }
+
+  const edit_seller_address_in_list = (data) => {
+    addressList.value.splice(data.index , 1)
+    addressList.value = [data.address , ...addressList.value]
   }
   </script>

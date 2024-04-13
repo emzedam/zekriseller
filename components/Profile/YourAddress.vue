@@ -16,20 +16,22 @@
       </div>
 
       <div class="address-list">
-         <ul class="flex flex-col space-y-3" v-if="addressList.length != 0">
-            <li class="border rounded-lg p-4 m-4 flex justify-between" v-for="(address , index) in addressList" :key="index">
+         <ul class="flex flex-col py-3" v-if="addressList.length != 0">
+            <li class="border rounded-lg p-2 m-3 my-1 flex justify-between" v-for="(address , index) in addressList" :key="index">
                <div class="address flex justify-start">
                   <div class="map-image h-[144px] w-[144px] border rounded-lg relative overflow-hidden">
                      <img alt="map" :src="`https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/pin-l-embassy+f74e4e(${address.lng},${address.lat})/${address.lng},${address.lat},14/400x400?access_token=pk.eyJ1IjoiaHNuZW16ZWQiLCJhIjoiY2xvcGdxOTI4MGEweTJpazRmM2JsYjA5YSJ9.8eqD-GBF4CO9Ma8aSYlM8A`" />
                   </div>
-                  <ul class="flex flex-col space-y-3 pr-2 pt-2">
+                  <ul class="flex flex-col space-y-3 pr-2">
                      <li class="flex items-center justify-start font-semibold text-lg"><i class="fa-light fa-location-dot px-2"></i><span>{{ address.city }}</span></li>
                      <li class="flex items-center justify-start font-semibold text-lg"><i class="fa-light fa-location-dot px-2"></i><span> {{ address.fullAddress }}</span></li>
                      <li class="flex items-center justify-start font-semibold text-lg"><i class="fa-light fa-signs-post px-2"></i><span>{{ address.codePosti }}</span></li>
                   </ul>
                </div>
                <div class="button-edit-remove space-y-3 flex flex-col">
-                  <button class="relative btn hover:text-bg-500/80 transition-colors duration-500 text-cyan-500 border-cyan-500 border px-6 py-3 hover:bg-cyan-50 w-full flex items-center rounded-lg justify-center">
+                  <button 
+                  @click="open_edit_map_modal(address , index)"
+                  class="relative btn hover:text-bg-500/80 transition-colors duration-500 text-cyan-500 border-cyan-500 border px-6 py-3 hover:bg-cyan-50 w-full flex items-center rounded-lg justify-center">
                      <i class="fa-light fa-edit pl-2 text-xl"></i> ویرایش
                   </button>
 
@@ -379,7 +381,11 @@
                         <span
                           class="relative z-20 flex iteme-center justify-center w-full text-center"
                         >
-                          <span class="w-full" v-if="reverseLoading == false">تایید و ادامه</span>
+                          <span class="w-full" v-if="reverseLoading == false">
+                            
+                            {{ mapModalstate == 'create' ? 'تایید و ادامه' : 'بروزرسانی آدرس' }}
+                          
+                          </span>
                           <div class="loader" v-if="reverseLoading == true"></div>
                         </span>
                       </button>
@@ -412,7 +418,7 @@ const props = defineProps({
 })
 const toast = useToast();
 const mapCenter = ref([51.38866839337672, 35.69080481760244]);
-const emit = defineEmits(["add_address_to_list"]);
+const emit = defineEmits(["add_address_to_list" , "edit_address_in_list"]);
 const searchResult = ref([]);
 const showMapForm = ref(false);
 const sellerToken = useCookie("seller-token");
@@ -423,14 +429,21 @@ const cityStatus = ref(false);
 const citiesList = ref([]);
 const sellerStore = useSellersStore();
 const reverseLoading = ref(false);
-
+const mapModalstate = ref("create")
 const mapModal = ref(false)
+const editableAddressData = reactive({
+  address: null,
+  index: null
+})
 
 onMounted(() => {
    get_states_list();
 })
 
 const openMapModal = () => {
+   clearData()
+   mapModalstate.value = "create"
+   showMapForm.value = false
    mapModal.value = true
    map_init()
 }
@@ -569,6 +582,7 @@ const reverse_geocode = async () => {
         addressData.city = addressObj.city;
         addressData.lat = mapCenter.value[1];
         addressData.lng = mapCenter.value[0];
+
       } else if (result.data.statusCode == 401) {
         window.location.reload();
       }
@@ -598,18 +612,38 @@ const get_states_list = async () => {
 
 const send_for_save_address = async () => {
    reverseLoading.value = true
-  const result = await sellerStore.store_seller_address(addressData)
-  if(result.status == 200) {
-   showMapForm.value = false
-   reverseLoading.value = false
-   mapModal.value = false
-   emit("add_address_to_list" , result.result)
-   toast.success(result.message)
-   clearData()
-  }else{
-   reverseLoading.value = false
-   toast.error(result.message)
-  }
+   if(mapModalstate.value == 'create'){
+      const result = await sellerStore.store_seller_address(addressData)
+      if(result.status == 200) {
+        showMapForm.value = false
+        reverseLoading.value = false
+        mapModal.value = false
+        emit("add_address_to_list" , result.result)
+        toast.success(result.message)
+        clearData()
+      }else{
+        reverseLoading.value = false
+        toast.error(result.message)
+      }
+   }else{
+
+    let sended_data = {
+      ...addressData , 
+      _id: editableAddressData.address._id,
+      seller_id: editableAddressData.address.seller_id
+    }
+
+    const result = await sellerStore.edit_seller_address(sended_data)
+      if(result.status == 200) {
+        reverseLoading.value = false
+        mapModal.value = false
+        emit("edit_address_in_list" , {address: result.result , index: editableAddressData.index})
+        toast.success(result.message)
+      }else{
+        reverseLoading.value = false
+        toast.error(result.message)
+      }
+   }
 };
 
 const clearData = () => {
@@ -621,7 +655,31 @@ const clearData = () => {
    addressData.pelak = ""
    addressData.codePosti = ""
 }
-</script>
+
+const open_edit_map_modal = (address , index) => {
+  mapModalstate.value = "update"
+  mapModal.value = true
+  showMapForm.value = true
+
+  
+
+  editableAddressData.index = index
+
+  mapCenter.value = [address.lng , address.lat]
+
+  addressData.fullAddress = address.fullAddress
+  addressData.state     = address.state
+  addressData.city      = address.city
+  addressData.lat       = address.lat
+  addressData.lng       = address.lng
+  addressData.pelak     = address.pelak
+  addressData.codePosti = address.codePosti
+
+  editableAddressData.address = address
+
+  map_init()
+}
+</script> 
 
 <style>
 .modal-mask {
