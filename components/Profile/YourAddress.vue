@@ -41,8 +41,8 @@
                </div>
             </li>
          </ul>
-         <div v-else>
-            <h4>ادرسی اضافه نشده !</h4>
+         <div class="py-20 text-center" v-else>
+            <h4>هیچ آدرسی اضافه نشده !</h4>
          </div>
       </div>
    </div>
