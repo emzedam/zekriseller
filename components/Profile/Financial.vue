@@ -100,6 +100,9 @@
       :maliatData="maliatData"
       @change_maliat_status="(state) => maliatData.is_maliat = state"
       v-model="activeModal" 
+      @doSetFiles="(files) => setMaliatFiles(files)"
+      @doFilesStore="doFilesStore()"
+      ref="maliatcomponentRef"
    />
    <ShabaModal 
       :shabanumber="shabanumber"
@@ -124,6 +127,7 @@ import ShabaModal from '@/components/Modals/Profile/Financial/shaba-modal.vue'
 import { useSellersStore } from '~/store/sellersStore';
 import { storeToRefs } from 'pinia';
 
+const maliatcomponentRef = ref(null)
 const toast = useToast();
 const requestLoading = ref(false)
 const sellerStore = useSellersStore()
@@ -208,6 +212,51 @@ const shabaNumberStore = async () => {
       }
    }else{
       toast.error("لطفا شماره شبا را وارد کنید");
+      requestLoading.value = false
+   }
+}
+
+const setMaliatFiles = (files) => {
+   if(files.length != 0){
+      for(let i = 0; i < files.length; i++){
+         const types = ["image/png", "image/jpeg", "image/jpg"]
+         if(!types.includes(files[i].type)) {
+            toast.error("فایل های انتخابی باید از نوع عکس باشند")
+            maliatcomponentRef.value.fileInputRefs.value = ""
+            maliatData.files = []
+         }else if(files[i].size > 3000000){
+            toast.error("حجم فایل نمیتواند بیشتر از ۳ مگابایت باشد")
+            maliatcomponentRef.value.fileInputRefs.value = ""
+            maliatData.files = []
+         }else {
+            maliatData.files = files
+         }
+      }
+   }else{
+      maliatcomponentRef.value.fileInputRefs.value = ""
+   }
+}
+
+const doFilesStore = async () => {
+   if(maliatData.is_maliat == true) {
+      if(maliatData.files.length != 0){
+         sendFilesWithResult()
+      }else {
+         toast.error("لطفا مدارک مربوطه را انتخاب کنید !")
+      }
+   }else{
+      sendFilesWithResult()
+   }
+}
+
+const sendFilesWithResult = async () => {
+   requestLoading.value = true
+   const result = await sellerStore.store_seller_maliat_files(maliatData)
+   if(result.status == 200) {
+      toast.success(result.message)
+      requestLoading.value = false
+   }else {
+      toast.error(result.message)
       requestLoading.value = false
    }
 }
