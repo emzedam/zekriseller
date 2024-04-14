@@ -104,6 +104,8 @@
    <ShabaModal 
       :shabanumber="shabanumber"
       @inputShabaNumber="(text) => shabanumber = text"
+      :requestLoading="requestLoading"
+      @shabanumberStore="shabaNumberStore()"
       v-model="activeModal" 
    />
 </div>
@@ -184,6 +186,28 @@ const cardNumberStore = async () => {
       }
    }else{
       toast.error("لطفا شماره کارت را وارد کنید");
+      requestLoading.value = false
+   }
+}
+
+const shabaNumberStore = async () => {
+   if(shabanumber.value != ""){
+      requestLoading.value = true
+      const result = await sellerStore.update_seller_shabanumber({shabanumber: shabanumber.value})
+      if(result.status == 200){
+         requestLoading.value = false
+         toast.success(result.message)
+         if(authSeller.value != null && authSeller.value.financial != null){
+            authSeller.value.financial = result.result
+            shabanumber.value = result.result.shabanumber
+         }
+         activeModal.value = null
+      }else{
+         toast.error(result.message)
+         requestLoading.value = false
+      }
+   }else{
+      toast.error("لطفا شماره شبا را وارد کنید");
       requestLoading.value = false
    }
 }

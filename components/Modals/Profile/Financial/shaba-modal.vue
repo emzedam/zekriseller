@@ -59,8 +59,25 @@
                             </div>
 
 
-                        <button
-                            class="relative btn hover:text-bg-500/80 transition-colors duration-500 bg-cyan-500 px-6 py-3 text-white w-full mt-4 flex items-center  justify-center border rounded-lg"> تایید </button>
+                            <Button
+                            :class="['bg-gray-300 mt-2']"
+                            :isShow="shabanumber == '' ? false : true"
+                            >
+                              <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
+                            </Button>
+                            <Button
+                              @click="shabaNumberStore()"
+                              :class="['bg-cyan-500 mt-2 shadow-md shadow-cyan-200']"
+                              :isShow="
+                                shabanumber != '' &&
+                                requestLoading == false
+                                  ? false
+                                  : true
+                              "
+                            >
+                              <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
+                            </Button>
+                            <LoadingButton :class="['mt-2']" :isShow="requestLoading" />
 
 
                     </div>
@@ -70,16 +87,28 @@
     </transition-group>
 </template>
 <script setup>
+import Button from "@/components/Buttons/Button.vue";
+import LoadingButton from "@/components/Buttons/LoadingButton.vue";
+
 const activeModal = defineModel()
-const emit = defineEmits(["inputShabaNumber"])
+const emit = defineEmits(["inputShabaNumber" , "shabanumberStore"])
 const props = defineProps({
     shabanumber: {
         type: String,
+        required: true
+    },
+    requestLoading: {
+        type: Boolean,
         required: true
     }
 })
 
 const set_shabanumber = (e) => {
     emit("inputShabaNumber" , e.target.value)
+}
+
+
+const shabaNumberStore = () => {
+    emit("shabanumberStore")
 }
 </script>
