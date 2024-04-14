@@ -13,7 +13,7 @@
                <div class="flex items-center">
                   <p class="text-body-1 text-gray-500 ml-1">شماره کارت</p>
                   <div class="rounded-lg px-2 text-caption-strong text-blue-500 bg-blue-50"
-                  v-if="authSeller != null && authSeller.financial != null && authSeller.financial.cardnumber_status == false">در حال بررسی</div>
+                  v-if="authSeller != null && authSeller.financial != null && authSeller.financial.cardnumber_status == false && authSeller.financial.cardnumber != null">در حال بررسی</div>
                </div>
                <p class="font-semibold text-gray-900 mt-2 ltr text-right text-md">{{ authSeller != null && authSeller.financial != null && authSeller.financial.cardnumber != null ? authSeller.financial.cardnumber : 'شماره کارت را وارد کنید' }}</p>
             </div>
@@ -37,7 +37,7 @@
          <div class="flex justify-between items-center py-3 lg:py-4 px-4 border-b">
             <div>
                <div class="flex items-center">
-                  <p class="text-body-1 text-gray-500 ml-1">صاحب یا صاحبان حساب</p>
+                  <p class="text-body-1 text-gray-500 ml-1"> شماره شبا  </p>
                   <div class="rounded-lg px-2 text-caption-strong text-blue-500 bg-blue-50"
                   v-if="authSeller != null && authSeller.financial != null && authSeller.financial.shabanumber_status == false">در حال بررسی</div>
                  </div>
@@ -67,7 +67,7 @@
                <div class="flex items-center">
                   <p class="text-body-1 text-gray-500 ml-1">مشمول مالیات بر ارزش افزوده</p>
                   <div class="rounded-lg px-2 text-caption-strong text-blue-500 bg-blue-50"
-                  v-if="authSeller != null && authSeller.financial != null && authSeller.financial.maliat_files_status == false">در حال بررسی</div>
+                  v-if="authSeller != null && authSeller.financial != null && authSeller.financial.maliat_files_status == false && authSeller.financial.maliat_files != null">در حال بررسی</div>
                   </div>
                <p class="font-medium text-gray-700 font-fa text-md">
                   {{ authSeller != null && authSeller.financial != null && authSeller.financial.is_maliat != null ? authSeller.financial.is_maliat == false ? 'خیر' : 'بله' : 'مشخص نشده' }}
@@ -93,6 +93,8 @@
       v-model="activeModal" 
       @inputCardNumber="(text) => cardnumber = text"
       :cardnumber="cardnumber"
+      :requestLoading="requestLoading"
+      @cardnumberStore="cardNumberStore()"
    />
    <MaliatModal
       :maliatData="maliatData"
@@ -113,19 +115,22 @@
 </template>
 
 <script setup>
+import { useToast } from "vue-toastification";
 import CardnumberModal from '@/components/Modals/Profile/Financial/Financial-Card-Modal.vue'
 import MaliatModal from '@/components/Modals/Profile/Financial/maliat-modal.vue'
 import ShabaModal from '@/components/Modals/Profile/Financial/shaba-modal.vue'
 import { useSellersStore } from '~/store/sellersStore';
 import { storeToRefs } from 'pinia';
 
+const toast = useToast();
+const requestLoading = ref(false)
 const sellerStore = useSellersStore()
 const { authSeller } = storeToRefs(sellerStore)
 
 const activeModal = ref(null)
 
 onMounted(() => {
-   check_and_set_cardnumber()
+   setCardVsShabaDefault()
 })
 
 const cardnumber = ref("")
@@ -136,10 +141,14 @@ const maliatData = reactive({
 })
 
 
-const check_and_set_cardnumber = () => {
+const setCardVsShabaDefault = () => {
    if(authSeller.value != null) {
       if(authSeller.value.financial != null && authSeller.value.financial.cardnumber != null) {
          cardnumber.value = authSeller.value.financial.cardnumber
+      }
+
+      if(authSeller.value.financial != null && authSeller.value.financial.shabanumber != null) {
+         shabanumber.value = authSeller.value.financial.shabanumber
       }
    }
 }
@@ -156,5 +165,27 @@ watch(cardnumber, (newVal, oldVal) => {
   }
 );
 
+
+const cardNumberStore = async () => {
+   if(cardnumber.value != ""){
+      requestLoading.value = true
+      const result = await sellerStore.update_seller_cardnumber({cardnumber: cardnumber.value})
+      if(result.status == 200){
+         requestLoading.value = false
+         toast.success(result.message)
+         if(authSeller.value != null && authSeller.value.financial != null){
+            authSeller.value.financial = result.result
+            cardnumber.value = result.result.cardnumber
+         }
+         activeModal.value = null
+      }else{
+         toast.error(result.message)
+         requestLoading.value = false
+      }
+   }else{
+      toast.error("لطفا شماره کارت را وارد کنید");
+      requestLoading.value = false
+   }
+}
 
 </script>

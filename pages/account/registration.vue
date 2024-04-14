@@ -365,12 +365,12 @@ const add_seller_info = () => {
       return false;
     }
     // check validate code eghtesadi
-    if (seller_register_data.value.seller_info.code_eghtesadi != "") {
-      if (!/^[0-9]$/.test(seller_register_data.value.seller_info.code_eghtesadi)) {
-        toast.error("کد اقتصادی وارد شده معتبر نمیباشد");
-        return false;
-      }
-    }
+    // if (seller_register_data.value.seller_info.code_eghtesadi != "") {
+    //   if (!/^[0-9]$/.test(seller_register_data.value.seller_info.code_eghtesadi)) {
+    //     toast.error("کد اقتصادی وارد شده معتبر نمیباشد");
+    //     return false;
+    //   }
+    // }
     // check shabanumber validate
     if (seller_register_data.value.seller_info.shabanumber != "") {
       if (!/^[0-9]{24}$/.test(seller_register_data.value.seller_info.shabanumber)) {

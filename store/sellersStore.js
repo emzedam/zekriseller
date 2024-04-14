@@ -443,6 +443,31 @@ const actions = {
         }else{
             return false
         }
+    },
+    async update_seller_cardnumber(data){
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/profile/financial/update-cardnumber" , data , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
     }
 }
 

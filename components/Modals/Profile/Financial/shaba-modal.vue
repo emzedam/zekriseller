@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="modal-body font-fa mx-2 px-6 my-4 ">
-                        <p class="py-2 font-medium text-gray-700">
+                        <p class="py-2 font-medium text-orange-500">
                             شماره شبا باید متعلق به صاحب کُد ملی باشد
                         </p>
                         <div class="gap-6">
