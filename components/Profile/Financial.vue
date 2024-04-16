@@ -76,9 +76,14 @@
             <div class="cursor-pointer">
                <span class="hidden lg:inline-block">
                   <div class="flex">
-                     <i @click="activeModal = 'maliatmodal'" class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i>
+                     <i 
+                     v-if="authSeller != null && authSeller.financial == null || authSeller != null && authSeller.financial.maliat_files == null"
+                     @click="activeModal = 'maliatmodal'" class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i>
                      <!-- موقع ویرایش این ایکون نمایش داده شود برای مثال فرض کنید شماره هنوز وارد نشده به جای ایکون ویرایش ایکون پلاس نمایش داده می شود -->
-                     <span class="!hidden"><i class="fa-light fa-edit hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i></span>
+                     <span
+                     v-if="authSeller != null && authSeller.financial == null || authSeller != null && authSeller.financial.maliat_files != null"
+                     @click="activeModal = 'maliatmodal'"
+                     ><i class="fa-light fa-edit hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i></span>
                   </div>
                </span>
                <span class="inline-block lg:hidden">
@@ -98,6 +103,7 @@
    />
    <MaliatModal
       :maliatData="maliatData"
+      :requestLoading="requestLoading"
       @change_maliat_status="(state) => maliatData.is_maliat = state"
       v-model="activeModal" 
       @doSetFiles="(files) => setMaliatFiles(files)"
@@ -229,7 +235,7 @@ const setMaliatFiles = (files) => {
             maliatcomponentRef.value.fileInputRefs.value = ""
             maliatData.files = []
          }else {
-            maliatData.files = files
+            maliatData.files = [files[i] , ...maliatData.files]
          }
       }
    }else{
@@ -254,6 +260,10 @@ const sendFilesWithResult = async () => {
    const result = await sellerStore.store_seller_maliat_files(maliatData)
    if(result.status == 200) {
       toast.success(result.message)
+      authSeller.value.financial = result.result
+      activeModal.value = null
+
+      maliatData.files = []
       requestLoading.value = false
    }else {
       toast.error(result.message)

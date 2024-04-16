@@ -68,17 +68,21 @@
                                            class="relative flex items-center"
                                           >
                                            <div class="flex items-center justify-center relative grow-1">
-                                               <div class="flex text-cyan-500"><i class="fa fa-plus"></i></div>
+                                               <div class="flex text-cyan-500" v-if="maliatData.files.length == 0"><i class="fa fa-plus"></i></div>
                                                <input 
-                                               ref="fileInputRefs"
-                                               @change="(e) => setMaliatFiles(e)"
-                                               type="file" 
-                                                   class="hidden" name="image">
+                                                    multiple
+                                                    ref="fileInputRefs"
+                                                    @change="(e) => setMaliatFiles(e)"
+                                                    type="file"
+                                                    class="hidden" name="image"
+                                                />
                                            </div>
                                        </label>
-                                       <p class="font-semibold align-center  text-cyan-900">افزودن</p>
-                                   </div>
-                               </label></div>
+                                       <p class="font-semibold align-center text-cyan-900" v-if="maliatData.files.length == 0">افزودن</p>
+                                       <p v-else class="font-semibold align-center text-cyan-900 text-xs text-center">تعداد <span class="bg-orange-100 text-sm px-2 text-orange-500 rounded-lg mx-1">{{ maliatData.files.length }}</span> فایل انتخاب شد.</p>
+                                    </div>
+                               </label>
+                           </div>
                            <div class="text-gray-500 mr-4">
                                <p>شرایط تصویر:</p>
                                <ul
@@ -100,17 +104,11 @@
                    </div>
 
 
-                   <Button
-                   :class="['bg-gray-300 mt-2']"
-                   :isShow="cardnumber == '' ? false : true"
-                   >
-                     <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
-                   </Button>
+
                    <Button
                      @click="maliatFilesStore()"
                      :class="['bg-cyan-500 mt-2 shadow-md shadow-cyan-200']"
                      :isShow="
-                       cardnumber != '' &&
                        requestLoading == false
                          ? false
                          : true

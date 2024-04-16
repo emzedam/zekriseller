@@ -493,6 +493,40 @@ const actions = {
         }else{
             return false
         }
+    },
+    async store_seller_maliat_files(data) {
+        const formData = new FormData();
+        let token = cookies.get("seller-token") || "";
+        if(data.is_maliat != false) {
+            for(let i=0; i < data.files.length; i++) {
+                formData.append("maliat_files["+i+"]" , data.files[i])
+            }
+        }
+
+        formData.append("is_maliat" , data.is_maliat)
+
+        if(token != ""){
+            const result = await api.post("/sellers/profile/financial/update-maliatdata" , formData , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
     }
 }
 
