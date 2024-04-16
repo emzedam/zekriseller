@@ -1,9 +1,11 @@
 <template>
-    <div class="fixed top-0 left-0 z-50 flex w-full h-full transition-opacity duration-300 font-fa overflow-hidden">
-           <div class="absolute inset-0 transition-opacity duration-300 bg-black/20"></div>
+<transition-group name="modal">
+    <div v-if="activeModal == true" class="fixed top-0 left-0 z-50 flex w-full h-full transition-opacity duration-300 font-fa overflow-hidden">
+           <div @click="activeModal = false" class="absolute inset-0 transition-opacity duration-300 bg-black/20"></div>
            <div
-               class="relative rounded-lg shadow-lg shadow-gray-300/40 modal-container h-auto max-w-2xl bg-white m-auto inset-0 w-full">
+               class="relative rounded-lg shadow-lg shadow-gray-300/40 h-auto max-w-2xl bg-white m-auto inset-0 w-full">
                <button type="button"
+                   @click="activeModal = false"
                    class="z-[1] absolute w-8 h-8 text-gray-400 -top-4 -right-4 transform translate-x-3 -translate-y-1 transition-transform hover:bg-gray-100 hover:duration-300 bg-white rounded-md shadow-md flex items-center justify-center"
                    data-bs-dismiss="modal" aria-label="Close"><i class="text-lg fa fa-times"></i></button>
                <div class="text-right inline-flex items-center pr-8 py-4 border-b w-full">
@@ -13,8 +15,6 @@
                </div>
                <div class="modal-body font-fa mx-2 px-6 my-4 ">
                    <div class="gap-6">
-
-
 
                        <div class="relative col-span-4 sm:col-span-2">
                            <div class="flex mt-1 rounded-md">
@@ -37,7 +37,6 @@
                                                            class="flex items-center pl-2 text-left text-cyan-500 fa-solid fa-check"></i></label>
                                                </div>
                                            </li>
-
                                        </ul>
                                    </div>
                                </div>
@@ -51,8 +50,14 @@
                                            class="relative flex items-center"
                                           >
                                            <div class="flex items-center justify-center relative grow-1">
-                                               <div class="flex text-cyan-500"><i class="fa fa-plus"></i></div><input type="file" accept="image/png, image/jpeg"
-                                                   class="hidden" name="image">
+                                               <div class="flex text-cyan-500"><i class="fa fa-plus"></i></div>
+                                               <input 
+                                                multiple
+                                                ref="fileInputRefs" 
+                                                type="file"
+                                                @change="(e) => setMadarekFiles(e)"
+                                                class="hidden" name="image"
+                                                >
                                            </div>
                                        </label>
                                        <p class="font-semibold align-center  text-cyan-900">افزودن</p>
@@ -79,15 +84,55 @@
                    </div>
 
 
-                   <button
-                       class="relative btn hover:text-bg-500/80 transition-colors duration-500 bg-cyan-500 px-6 py-3 text-white w-full mt-4 flex items-center  justify-center border rounded-lg">
-                       تایید </button>
+                   <Button
+                        @click="MadarekFilesStore()"
+                        :class="['bg-cyan-500 mt-2 shadow-md shadow-cyan-200']"
+                        :isShow="
+                            requestLoading == false
+                            ? false
+                            : true
+                        "
+                    >
+                        <i class="fa-solid fa-edit pl-2 text-xl"></i> تایید
+                    </Button>
+                    <LoadingButton :class="['mt-2']" :isShow="requestLoading" />
 
 
                </div>
            </div>
        </div>
    </div>
-
-
+</transition-group>
 </template>
+
+<script setup>
+import Button from "@/components/Buttons/Button.vue";
+import LoadingButton from "@/components/Buttons/LoadingButton.vue";
+
+const activeModal = defineModel()
+const fileInputRefs = ref(null)
+const emit = defineEmits(["doSetFiles" , "doFilesStore"])
+const props = defineProps({
+    madarekData: {
+        type: [Object , Array],
+        required: true
+    },
+    requestLoading: {
+        type: Boolean,
+        required: true
+    }
+})
+
+
+const setMadarekFiles = (e) => {
+    emit("doSetFiles" , e.target.files)
+}
+
+const MadrekFilesStore = () => {
+    emit("doFilesStore")
+}
+
+defineExpose({
+    fileInputRefs
+})
+</script>
