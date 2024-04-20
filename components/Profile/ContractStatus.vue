@@ -13,22 +13,28 @@
         </div>
 
 
-      <div class="flex justify-between items-center py-3 lg:py-4 px-4 border rounded-lg m-4">
+      <div class="flex justify-between items-center py-3 lg:py-4 px-4 border rounded-lg m-4" :class="contractInfo != null && contractInfo.contract_status == true ? 'bg-gray-100' : ''">
          <div >
             <div class="flex items-center">
-               <p class="text-body-1 text-gray-900 ml-1 font-semibold">امضانشده</p>
+               <p class="text-body-1 text-gray-900 ml-1 font-semibold" v-if="contractInfo == null || contractInfo.contract_status == false">امضانشده</p>
+               <p class="text-body-1 text-gray-900 ml-1 font-semibold" v-else>امضا شده</p>
             </div>
-            <p v-on:click.prevent="ContractModal = !ContractModal" class="font-semibold text-cyan-500 mt-2 text-right text-md cursor-pointer">از اینجا امضا کنید</p>
+            <p v-on:click.prevent="contractInfo.contract_status != true ? activeModal = !activeModal: false" class="font-semibold text-cyan-500 mt-2 text-right text-md cursor-pointer">از اینجا امضا کنید</p>
          </div>
          <div class="cursor-pointer">
+
             <div class="flex">
-               <span class="!hidden"> <i class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i></span>
+               <span class="!hidden">
+                  <i class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i>
+               </span>
                <!-- موقع ویرایش این ایکون نمایش داده شود برای مثال فرض کنید شماره هنوز وارد نشده به جای ایکون ویرایش ایکون پلاس نمایش داده می شود -->
-               <span class=""><i class="fa-light fa-edit hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i></span>
+               <span class="">
+                  <i class="fa-light fa-edit hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i>
+               </span>
             </div>
 
             <span class="hidden lg:inline-block"> </span>
-            <span class="inline-block lg:hidden" v-on:click.prevent="ContractModal = !ContractModal">
+            <span class="inline-block lg:hidden" v-on:click.prevent="activeModal = !activeModal">
                <div class="flex text-gray-400"><i class="fa-light fa-chevron-left text-lg hover:text-cyan-500 transition-all duration-300"></i></div>
             </span>
          </div>
@@ -41,37 +47,53 @@
 </div>
 
 <!-- ============== وضعیت قرارداد======================= -->
-<transition-group name="modal">
-   <div v-if="ContractModal" class="fixed top-0 left-0 z-[1000] flex w-full h-full transition-opacity duration-300 font-fa overflow-hidden">
-            <div v-on:click.prevent="ContractModal = !ContractModal" class="absolute inset-0 transition-opacity duration-300 bg-black/20"></div>
-            <div class="relative rounded-lg shadow-lg shadow-gray-300/40    bg-white w-full  lg:m-auto m-6 left-0 right-0 max-w-6xl">
-                <button v-on:click.prevent="ContractModal = !ContractModal" type="button" class="z-[1] absolute w-8 h-8 text-gray-400 transform translate-x-5 -translate-y-3 transition-transform hover:translate-x-4 hover:transition-transform hover:duration-300 bg-white rounded-md shadow-md flex items-center justify-center">
-                        <i class="text-lg fa fa-times"></i>
-                      </button>
-                <div class="text-right inline-flex items-center pr-8 py-4 border-b w-full">
-                    <div class="info">
-                        <div class="text-xl font-semibold block text-gray-500">جزءیات درخواست برداشت</div>
-                    </div>
-                </div>
 
-  <ContractModal/>
-  </div>
-  </div>
-</transition-group>
+
+  <ContractModal
+      v-model="activeModal"
+      @saveSign="saveSellerSign()"
+      ref="contractModalRef"
+      :requestLoading="requestLoading"
+  />
+ 
+
 </template>
 
-<script>
-  import ContractModal from "@/components/Modals/Profile/Contract/ContractModal.vue";
-export default {
-   
-  components: {
-   ContractModal
-   },
+<script setup>
+   import { useToast } from "vue-toastification";
+   import { useSellersStore } from '~/store/sellersStore';
+   import ContractModal from "@/components/Modals/Profile/Contract/ContractModal.vue";
 
-  data() {
-    return {
-      ContractModal: false,
-    }
-  },
-}
+   const contractModalRef = ref(null)
+   const activeModal = ref(false)
+   const toast = useToast();
+   const requestLoading = ref(false)
+   const sellerStore = useSellersStore()
+   const contractInfo = ref(null)
+
+   onMounted(async() => {
+      await get_contract_object()
+   })
+
+   const get_contract_object = async () => {
+      const result = await sellerStore.get_seller_contract_state()
+      if(result.status == 200){
+         contractInfo.value = result.result
+         contractModalRef.value.contractValue = result.result.contarct_status == true ? 1 : 0
+      }
+   }
+
+   const saveSellerSign = async () => {
+      requestLoading.value = true
+      const result = await sellerStore.save_seller_sign_contract(contractModalRef.value.contractValue)
+      if(result.status == 200){
+         requestLoading.value = false
+         contractInfo.value = result.result
+         activeModal.value = false
+         toast.success(result.message)
+      }else {
+         toast.error(result.message)
+         requestLoading.value = false
+      }
+   }
 </script>

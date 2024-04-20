@@ -14,9 +14,9 @@
             <span class="font-semibold">موضوع</span>
             <strong>از اینجا ویدئو یا مطلب را مشاهده کنید</strong>
          </div>
-         <ul class="divide-y font-semibold text-gray-700">
+         <ul class="divide-y font-semibold text-gray-700" v-if="videos.length != 0"> 
 
-            <li class="p-2 flex items-center justify-between hover:bg-cyan-50 transition-all duration-500 cursor-pointer">
+            <!-- <li class="p-2 flex items-center justify-between hover:bg-cyan-50 transition-all duration-500 cursor-pointer">
                <span>همه چیز در مورد درج کالا</span>
                <div class="gap-4 flex items-center">
                 <nuxt-link to="/view" class="border rounded-lg border-cyan-500 px-4 py-1 font-semi-bold hover:bg-cyan-100 transition-all text-cyan-500">
@@ -28,33 +28,16 @@
                </nuxt-link>
                </div>
 
-            </li>
-            <li class="p-2 flex items-center justify-between  hover:bg-cyan-50 transition-all duration-500 cursor-pointer">
-               <span>راهنمای ویدئویی عمده ترین دلایل رد شدن کالا</span>
+            </li> -->
+            <li v-for="(video , index) in videos" :key="index" class="p-2 flex items-center justify-between  hover:bg-cyan-50 transition-all duration-500 cursor-pointer">
+               <span>  {{ video.video_title }} </span>
                <div class="gap-4 flex items-center">
-               <nuxt-link to="/view" class="border rounded-lg border-cyan-500 px-4 py-1 font-semi-bold hover:bg-cyan-100 transition-all text-cyan-500">
-                  مشاهده
-               </nuxt-link>
+                  <nuxt-link to="/" class="border rounded-lg border-cyan-500 px-4 py-1 font-semi-bold hover:bg-cyan-100 transition-all text-cyan-500">
+                     مشاهده
+                  </nuxt-link>
                </div>
             </li>
 
-            <li class="p-2 flex items-center justify-between  hover:bg-cyan-50 transition-all duration-500 cursor-pointer">
-               <span>استراتژی‌های قیمت‌گذاری در دیجی‌کالا</span>
-               <div class="gap-4 flex items-center">
-               <nuxt-link to="/view" class="border rounded-lg border-cyan-500 px-4 py-1 font-semi-bold hover:bg-cyan-100 transition-all text-cyan-500">
-                  مشاهده
-               </nuxt-link>
-               </div>
-            </li>
-
-            <li class="p-2 flex items-center justify-between  hover:bg-cyan-50 transition-all duration-500 cursor-pointer">
-               <span>اموزش استفاده از پنل فروشندگان</span>
-               <div class="gap-4 flex items-center">
-               <nuxt-link to="/view" class="border rounded-lg border-cyan-500 px-4 py-1 font-semi-bold hover:bg-cyan-100 transition-all text-cyan-500">
-                  مشاهده
-               </nuxt-link>
-               </div>
-            </li>
          </ul>
       </div>
 
@@ -88,7 +71,7 @@
          <ul>
             <li class="Collapse p-4 border-t lg:block hidden">
                <div class="flex items-center ml-4">
-                  <input checked="" id="red-checkbox" type="radio" value="" class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500 focus:ring-2" />
+                  <input cid="red-checkbox" type="radio" value="" class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500 focus:ring-2" />
                   <label for="red-checkbox" class="mr-2 text-xl font-medium text-gray-900"><span class="pl-2">ساعت</span> <span class="pl-2">14</span><span class="pl-2">تا</span><span class="pl-2">16</span></label>
                </div>
             </li>
@@ -107,3 +90,22 @@
 <!-- ==============  آموزش======================= -->
   
 </template>
+
+<script setup>
+import { useSellersStore } from '~/store/sellersStore';
+
+const sellersStore = useSellersStore()
+const videos = ref([])
+
+
+onMounted(async () => {
+   await get_videos_list()
+})
+
+const get_videos_list = async () => {
+   const result = await sellersStore.get_seller_learning_videos()
+   if(result.status == 200){
+      videos.value = result.result
+   }
+}
+</script>

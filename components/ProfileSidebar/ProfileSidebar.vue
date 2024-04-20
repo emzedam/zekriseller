@@ -134,11 +134,11 @@
 
           <NuxtLink to="/profile/contract-status/" :class="$route.path == '/profile/contract-status/' ? 'text-cyan-500' : ''">
             <li
-              class="p-3 hover:bg-gray-50 transition-all releative duration-300 cursor-pointer font-medium items-center justify-between flex"
+              class="p-3 hover:bg-gray-50 transition-all releative duration-300 cursor-pointer font-medium items-center justify-between flex relative overflow-hidden"
             >
               <div class="flex items-center">
                 <span><i class="fa-light fa-file pl-2 text-xl"></i></span
-                ><span>قرارداد</span>
+                ><span> قرارداد</span>
                 <div
                   v-if="$route.path == '/profile/contract-status/'"
                   class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
@@ -150,24 +150,25 @@
             </li>
           </NuxtLink>
 
-          <NuxtLink to="/profile/tutorials/" :class="$route.path == '/profile/tutorials/' ? 'text-cyan-500' : ''"> 
+
+          <NuxtLink to="/profile/tutorials/" :class="$route.path == '/profile/tutorials/' ? 'text-cyan-500' : ''">
             <li
-              class="p-3 hover:bg-gray-50 transition-all releative duration-300 cursor-pointer font-medium items-center justify-between flex"
+              class="p-3 hover:bg-gray-50 transition-all releative duration-300 cursor-pointer font-medium items-center justify-between flex relative overflow-hidden"
             >
               <div class="flex items-center">
                 <span><i class="fa-light fa-video pl-2 text-xl"></i></span
-                ><span>آموزش</span>
+                ><span> آموزش</span>
                 <div
                   v-if="$route.path == '/profile/tutorials/'"
                   class="before:absolute before:bottom-0 before:bg-cyan-500 before:rounded-t-sm before:h-full before:right-0 before:w-1"
                 ></div>
               </div>
-
               <i
                 class="fa-solid fa-chevron-left pl-2 text-sm text-left block lg:hidden"
               ></i>
             </li>
           </NuxtLink>
+          
 
           <li
             class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex"

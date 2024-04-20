@@ -527,6 +527,166 @@ const actions = {
         }else{
             return false
         }
+    },
+    async get_seller_document_titles() {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.get("/sellers/profile/documents/get-titles" , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        } 
+    },
+    async store_seller_document_files(data) {
+        const formData = new FormData();
+        let token = cookies.get("seller-token") || "";
+
+        for(let i=0; i < data.files.length; i++) {
+            formData.append("doc_files["+i+"]" , data.files[i])
+        }
+        
+
+        formData.append("doc_title" , data.title)
+        formData.append("doc_title_id" , data.title_id)
+
+        if(token != ""){
+            const result = await api.post("/sellers/profile/documents/save-seller-docs" , formData , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
+    async get_seller_documents() {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.get("/sellers/profile/documents/get-seller-docs" , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        } 
+    },
+    async save_seller_sign_contract(data) {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/profile/contract/do-seller-sign" , {signState: data} , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
+    async get_seller_contract_state() {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.get("/sellers/profile/contract/get-contract" , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
+    },
+    async get_seller_learning_videos() {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.get("/sellers/profile/learnVideos/get-list" , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
     }
 }
 

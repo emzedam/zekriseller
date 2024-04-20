@@ -18,22 +18,27 @@
 
                        <div class="relative col-span-4 sm:col-span-2">
                            <div class="flex mt-1 rounded-md">
-                               <div class="relative w-full focus-within:z-10"><button type="button"
+                               <div class="relative w-full focus-within:z-10">
+                                <button @click="selectBoxState = !selectBoxState" type="button"
                                        class="text-gray-500 border border-gray-300 focus:ring-1 focus:outline-none focus:ring-cyan-500 font-medium rounded-lg text-sm p-4 text-center inline-flex items-center w-full justify-between"><i
                                            class="fa-duotone fa-image text-cyan-500 h-5 w-5 flex leading-[1px] text-[19px]"></i><span
-                                           class="w-full pr-2 text-right">نوع مدرک </span><i
+                                           class="w-full pr-2 text-right"> {{ madarekData.title == "" ? "مدارک مربوطه" : madarekData.title }} </span><i
                                            class="fa-duotone fa-angle-down text-[14px] ml-1 w-4 h-3 leading-[20px]"></i></button>
-                                   <div class="z-10 hidden w-full mt-2 bg-white border rounded-lg">
-                                       <ul class="h-40 p-3 overflow-y-auto text-sm text-gray-700"
+                                   <div 
+                                   :class="selectBoxState == true ? '' : 'hidden'"
+                                   class="z-10 w-full absolute mt-2 bg-white border rounded-lg">
+                                       <ul v-if="titleLists.length != 0" class="h-40 p-3 overflow-y-auto text-sm text-gray-700"
                                            aria-labelledby="dropdownSearchButton">
-                                           <li>
+                                           <li
+                                           @click="selectDocTitle(title.title, title._id)"
+                                           v-for="(title , index) in titleLists" :key="index"> 
                                                <div class="flex items-center w-full my-1 border rounded hover:bg-gray-100">
-                                                   <input id="checkbox-item-11" type="hidden" value=""
-                                                       class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded-lg"><label
+                                                    <label
                                                        for="checkbox-item-11"
-                                                       class="flex items-center justify-between w-full py-2 mr-2 text-sm font-medium text-gray-500 rounded"><span
-                                                           class="flex items-center w-full pr-2 text-right">کارت ملی
+                                                       class="flex cursor-pointer items-center justify-between w-full py-2 mr-2 text-sm font-medium text-gray-500 rounded"><span
+                                                           class="flex items-center w-full pr-2 text-right">{{ title.title }} 
                                                        </span><i
+                                                       v-if="madarekData.title == title.title"
                                                            class="flex items-center pl-2 text-left text-cyan-500 fa-solid fa-check"></i></label>
                                                </div>
                                            </li>
@@ -50,7 +55,7 @@
                                            class="relative flex items-center"
                                           >
                                            <div class="flex items-center justify-center relative grow-1">
-                                               <div class="flex text-cyan-500"><i class="fa fa-plus"></i></div>
+                                               <div class="flex text-cyan-500"><i v-if="madarekData.files.length == 0" class="fa fa-plus"></i></div>
                                                <input 
                                                 multiple
                                                 ref="fileInputRefs" 
@@ -60,7 +65,8 @@
                                                 >
                                            </div>
                                        </label>
-                                       <p class="font-semibold align-center  text-cyan-900">افزودن</p>
+                                       <p class="font-semibold align-center text-cyan-900" v-if="madarekData.files.length == 0">افزودن</p>
+                                       <p v-else class="font-semibold align-center text-cyan-900 text-xs text-center">تعداد <span class="bg-orange-100 text-sm px-2 text-orange-500 rounded-lg mx-1">{{ madarekData.files.length }}</span> فایل انتخاب شد.</p>
                                    </div>
                                </label></div>
                            <div class="text-gray-500 mr-4">
@@ -71,7 +77,7 @@
                                        <p class="mr-1 mb-1">صاف و خوانا</p>
                                    </li>
                                    <li>
-                                   <p class="mr-1 mb-1">حجم کمتر از ۲ مگابایت</p>
+                                   <p class="mr-1 mb-1">حجم کمتر از 3 مگابایت</p>
                                </li>
                                <li>
                                    <p class="mr-1 mb-1">عرض کمتر از۲۵۰۰ پیکسل</p>
@@ -109,9 +115,10 @@
 import Button from "@/components/Buttons/Button.vue";
 import LoadingButton from "@/components/Buttons/LoadingButton.vue";
 
+const selectBoxState = ref(false)
 const activeModal = defineModel()
 const fileInputRefs = ref(null)
-const emit = defineEmits(["doSetFiles" , "doFilesStore"])
+const emit = defineEmits(["doSetFiles" , "doFilesStore" , "doSelectDocTitle"])
 const props = defineProps({
     madarekData: {
         type: [Object , Array],
@@ -119,6 +126,10 @@ const props = defineProps({
     },
     requestLoading: {
         type: Boolean,
+        required: true
+    },
+    titleLists: {
+        type: [Array , Object],
         required: true
     }
 })
@@ -128,8 +139,14 @@ const setMadarekFiles = (e) => {
     emit("doSetFiles" , e.target.files)
 }
 
-const MadrekFilesStore = () => {
+const MadarekFilesStore = () => {
     emit("doFilesStore")
+}
+
+
+const selectDocTitle = (title , id) => {
+    selectBoxState.value = false
+    emit("doSelectDocTitle" , {title,id})
 }
 
 defineExpose({
