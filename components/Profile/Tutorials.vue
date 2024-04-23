@@ -3,7 +3,7 @@
 <div class="lg:col-span-9">
    <div class="lg:rounded-md relative mb-4 border h-full">
       <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold p-4 border-b">
-         <span class="hover:bg-cyan-50 hover:text-cyan-500 cursor-pointer h-10 w-10 flex items-center justify-center border rounded-lg transition-all duration-300"><i class="fa-duotone fa-arrow-right !leading-3"></i></span>
+         <nuxt-link to="/profile/contract-status/"  class="hover:bg-cyan-50 hover:text-cyan-500 cursor-pointer h-10 w-10 flex items-center justify-center border rounded-lg transition-all duration-300"><i class="fa-duotone fa-arrow-right !leading-3"></i></nuxt-link>
          <span class="leading-3"> آموزش</span>
       </h2>
 
@@ -32,12 +32,11 @@
             <li v-for="(video , index) in videos" :key="index" class="p-2 flex items-center justify-between  hover:bg-cyan-50 transition-all duration-500 cursor-pointer">
                <span>  {{ video.video_title }} </span>
                <div class="gap-4 flex items-center">
-                  <nuxt-link to="/" class="border rounded-lg border-cyan-500 px-4 py-1 font-semi-bold hover:bg-cyan-100 transition-all text-cyan-500">
+                  <a href="javascript:void(0)" @click="doPlayMovie(video.video_file)" class="border rounded-lg border-cyan-500 px-4 py-1 font-semi-bold hover:bg-cyan-100 transition-all text-cyan-500">
                      مشاهده
-                  </nuxt-link>
+                  </a>
                </div>
             </li>
-
          </ul>
       </div>
 
@@ -84,6 +83,11 @@
             </li>
          </ul>
       </div>
+
+      <player
+         :playMovie="playMovie"
+         @unsetPlayerModal="() => unsetPlayerModal()"
+      />
    </div>
 </div>
 
@@ -93,14 +97,27 @@
 
 <script setup>
 import { useSellersStore } from '~/store/sellersStore';
+import player from '@/components/Profile/player.vue'
 
+const  { $player } = useNuxtApp();
 const sellersStore = useSellersStore()
 const videos = ref([])
+const playMovie = ref(false)
 
 
 onMounted(async () => {
    await get_videos_list()
 })
+
+const doPlayMovie = (videoName) => {
+   playMovie.value = true;
+   $player({ url: `https://api.zekrimarket.com/storage/files_container/sellers/learning_videos/${videoName}` });
+}
+
+const unsetPlayerModal = () => {
+  playMovie.value = false;
+  $player().remove();
+};
 
 const get_videos_list = async () => {
    const result = await sellersStore.get_seller_learning_videos()

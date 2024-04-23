@@ -19,6 +19,17 @@
   import { storeToRefs } from "pinia";
   const { loading } = storeToRefs(useSellersStore());
 
+  useHead({
+    script: [
+      {
+        type: "text/javascript",
+        src: "/js/jwplayer.js",
+        body: true,
+        defer: true,
+      },
+    ],
+  });
+
   definePageMeta({
     layout: "seller-profile-layout",
     middleware: "auth-dashboard",

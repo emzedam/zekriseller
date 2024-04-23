@@ -1132,10 +1132,6 @@ select {
   margin: 1rem;
 }
 
-.m-6 {
-  margin: 1.5rem;
-}
-
 .m-auto {
   margin: auto;
 }
@@ -1587,10 +1583,6 @@ select {
 
 .w-4 {
   width: 1rem;
-}
-
-.w-44 {
-  width: 11rem;
 }
 
 .w-5 {
@@ -4371,10 +4363,6 @@ input::-webkit-inner-spin-button {
 
   .lg\:col-span-9 {
     grid-column: span 9 / span 9;
-  }
-
-  .lg\:m-auto {
-    margin: auto;
   }
 
   .lg\:mx-0 {

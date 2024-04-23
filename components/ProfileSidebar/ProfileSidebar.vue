@@ -171,6 +171,7 @@
           
 
           <li
+            @click="doLogout()"
             class="p-3 hover:bg-gray-50 transition-all duration-300 cursor-pointer font-medium items-center justify-between flex"
           >
             <div class="flex items-center">
@@ -195,4 +196,10 @@ const emit = defineEmits(["close_navmenu_action"]);
 const close_navmenu_action = () => {
   emit("close_navmenu_action");
 };
+
+const doLogout = async () => {
+  if(confirm("آیا از خروج حساب کاربری خود مطمعن هستید ؟")) {
+    
+  }
+}
 </script>

@@ -3,7 +3,7 @@
 <div class="lg:col-span-9">
    <div class="lg:rounded-md relative mb-4 border h-full">
       <h2 class="flex items-center justify-start gap-4 text-2xl font-semibold p-4 border-b">
-         <span class="hover:bg-cyan-50 hover:text-cyan-500 cursor-pointer h-10 w-10 flex items-center justify-center border rounded-lg transition-all duration-300"><i class="fa-duotone fa-arrow-right !leading-3"></i></span>
+         <nuxt-link to="/profile/addresses/" class="hover:bg-cyan-50 hover:text-cyan-500 cursor-pointer h-10 w-10 flex items-center justify-center border rounded-lg transition-all duration-300"><i class="fa-duotone fa-arrow-right !leading-3"></i></nuxt-link>
          <span class="leading-3">اطلاعات مالی</span>
       </h2>
       <p class="p-4 font-medium text-gray-500 w-full border-b">حساب بانکی باید به نام مالک پنل باشد</p>
