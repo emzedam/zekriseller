@@ -1793,10 +1793,6 @@ select {
   cursor: pointer;
 }
 
-.\!list-disc {
-  list-style-type: disc !important;
-}
-
 .list-decimal {
   list-style-type: decimal;
 }

@@ -14,7 +14,7 @@
 
 
       <div class="flex justify-between items-center py-3 lg:py-4 px-4 border rounded-lg m-4" :class="contractInfo != null && contractInfo.contract_status == true ? 'bg-gray-100' : ''">
-         <div >
+         <div>
             <div class="flex items-center">
                <p class="text-body-1 text-gray-900 ml-1 font-semibold" v-if="contractInfo == null || contractInfo.contract_status == false">امضانشده</p>
                <p class="text-body-1 text-gray-900 ml-1 font-semibold" v-else>امضا شده</p>
@@ -22,7 +22,6 @@
             <p v-on:click.prevent="contractInfo.contract_status != true ? activeModal = !activeModal: false" class="font-semibold text-cyan-500 mt-2 text-right text-md cursor-pointer">از اینجا امضا کنید</p>
          </div>
          <div class="cursor-pointer">
-
             <div class="flex">
                <span class="!hidden">
                   <i class="fa-light fa-plus hover:text-cyan-500 transition-all duration-300 text-2xl text-cyan-500"></i>
