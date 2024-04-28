@@ -787,6 +787,31 @@ const actions = {
         }else{
             return false
         }
+    },
+    async chnage_siteurl_store(data) {
+        let token = cookies.get("seller-token") || "";
+        if(token != ""){
+            const result = await api.post("/sellers/profile/store_info/chnage-siteurl-store" , {siteurl_store: data} , {
+                headers: {
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            if(result.status == 200){
+                if(result.data){
+                    return result.data
+                }else{
+                    return {
+                        "message": "failed"
+                    }
+                }
+            }else{
+                return {
+                    "message": "failed"
+                }
+            }
+        }else{
+            return false
+        }
     }
 }
 

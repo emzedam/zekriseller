@@ -257,6 +257,8 @@
    <ShopWebsiteModal
       :activeModal="activeModal"
       @close="activeModal = null"
+      @updateStoreInfo="(data) => storeInfoe = data"
+      :storeUrl="storeInfoe.site_url_store"
    />
 </div>
 
